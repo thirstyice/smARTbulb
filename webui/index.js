@@ -1,0 +1,12 @@
+/*
+ * Project: smARTbulb                                                          *
+ * Filename: /webui/index.js                                                   *
+ *                                                                             *
+ * Created: 2026-01-19                                                         *
+ * Author: thirstyice                                                          *
+ *                                                                             *
+ * Copyright (c) 2026 Tauran - https://github.com/thirstyice                   *
+ * For details see smARTbulb/LICENSE (if applicable)                           *
+ *                                                                             *
+ */
+"use strict"

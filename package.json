@@ -1,0 +1,25 @@
+{
+  "name": "smartbulb",
+	"displayName": "smARTbulb",
+  "version": "0.0.1",
+  "description": "WebUI for smARTbulb ESP firmware",
+  "keywords": [
+    "webui",
+    "smARTbulb"
+  ],
+  "homepage": "https://github.com/thirstyice/smARTbulb#readme",
+  "bugs": {
+    "url": "https://github.com/thirstyice/smARTbulb/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thirstyice/smARTbulb.git"
+  },
+  "license": "SEE LICENSE IN smARTbulb/LICENSE",
+  "author": "thirstyice",
+  "type": "module",
+  "main": "webui-test.js",
+  "scripts": {
+    "test": "node webui-test.js"
+  }
+}
