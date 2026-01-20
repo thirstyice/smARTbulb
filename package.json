@@ -1,6 +1,6 @@
 {
   "name": "smartbulb",
-	"displayName": "smARTbulb",
+  "displayName": "smARTbulb",
   "version": "0.0.1",
   "description": "WebUI for smARTbulb ESP firmware",
   "keywords": [
@@ -18,8 +18,11 @@
   "license": "SEE LICENSE IN smARTbulb/LICENSE",
   "author": "thirstyice",
   "type": "module",
-  "main": "webui-test.js",
+  "main": "main.js",
   "scripts": {
-    "test": "node webui-test.js"
+    "test": "http-server ./webui -p 8080 -a 127.0.0.1 -c-1 -o"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }
