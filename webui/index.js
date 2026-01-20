@@ -10,3 +10,31 @@
  *                                                                             *
  */
 "use strict"
+
+var colorPicker;
+var whitePicker;
+
+addEventListener("DOMContentLoaded", (event) => {
+	colorPicker = new iro.ColorPicker("#color-picker", {
+		width: 400,
+		color: "#f0f",
+		wheelLightness: false,
+	});
+	whitePicker = new iro.ColorPicker("#white-picker", {
+		width: 400,
+		layout: [
+			{
+				component: iro.ui.Slider,
+				options: {
+					sliderType: "kelvin",
+				}
+			},
+			{
+				component: iro.ui.Slider,
+				options: {
+					sliderType: "value",
+				}
+			}
+		]
+	});
+});

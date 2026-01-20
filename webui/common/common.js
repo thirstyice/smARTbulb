@@ -1,38 +1,28 @@
 /*******************************************************************************
 * Project: smARTbulb                                                           *
-* Filename: /webui/index.css                                                   *
+* Filename: /webui/common.js                                                   *
 *                                                                              *
-* Created: 2026-01-19                                                          *
+* Created: 2026-01-20                                                          *
 * Author: thirstyice                                                           *
 *                                                                              *
 * Copyright (c) 2026 Tauran - https://github.com/thirstyice                    *
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
+"use strict"
+addEventListener("DOMContentLoaded", (event) => {
+	var collapseControl = document.getElementsByClassName("collapse-control");
 
-.picker {
-	margin-top: 30px;
-}
-
-#color {
-	margin-bottom: 25px;
-}
-
-#info table {
-	margin: auto;
-	width: 90%;
-	border-collapse: collapse;
-	table-layout: fixed;
-	margin-bottom: 10px;
-}
-
-#info td {
-	padding: 5px 3px;
-	border-top: 1px solid GrayText;
-}
-#info td:first-child {
-	text-align: right;
-}
-#info td:last-child {
-	text-align: left;
-}
+	for (var i = 0; i < collapseControl.length; i++) {
+		collapseControl[i].addEventListener("click", function() {
+			var content = this.nextElementSibling;
+			if (content.style.maxHeight){
+				this.classList.remove("active");
+				content.style.maxHeight = null;
+			} else {
+				this.classList.add("active");
+				content.style.maxHeight = content.scrollHeight + "px";
+			}
+		});
+	}
+});

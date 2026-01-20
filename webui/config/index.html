@@ -15,52 +15,15 @@
 		<meta charset="utf-8">
 		<meta name="color-scheme" content="dark light">
 		<link rel="stylesheet" href="/common/common.css"/>
-		<link rel="stylesheet" href="index.css"/>
-		<script src="/iro.min.js"></script>
 		<script src="/common/common.js"></script>
-		<script src="index.js"></script>
 	</head>
 	<body>
 		<div id="header">
 			<h1>${HOSTNAME}</h1>
 			<h2>${IP_ADDRESS}</h2>
 		</div>
-		<div id="color">
-			<div id="color-picker" class="picker"></div>
-			<div id="white-picker" class="picker"></div>
-		</div>
-		<a href="/config/index.html"><button type="button">Configuration</button></a>
-		<button type="button" class="collapse-control">Information</button>
-		<div id="info" class="collapse-content">
-			<h2>smARTbulb ${VERSION}</h2>
-			<table>
-				<tbody>
-					<tr>
-						<td>SSID:</td>
-						<td>${SSID}</td>
-					</tr>
-					<tr>
-						<td>Signal:</td>
-						<td>${SIGNAL}</td>
-					</tr>
-					<tr>
-						<td>Data source:</td>
-						<td>${DATA_SOURCE}</td>
-					</tr>
-					<tr>
-						<td>Universe:</td>
-						<td>${UNIVERSE}</td>
-					</tr>
-					<tr>
-						<td>Address:</td>
-						<td>${DMX_ADDRESS}</td>
-					</tr>
-					<tr>
-						<td>Last Received:</td>
-						<td>${RECEIVED}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<a href="network.html"><button type="button">Network</button></a>
+		<a href="light.html"><button type="button">Light</button></a>
+		<a href="control.html"><button type="button">Control</button></a>
 	</body>
 </html>
