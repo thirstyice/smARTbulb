@@ -17,7 +17,12 @@ body {
 	margin: 20px auto;
 }
 
-h1, h2, h3 {
+hr {
+	margin-top: 25px;
+	margin-bottom: 15px;
+}
+
+#header>* {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
@@ -66,4 +71,20 @@ button {
 
 .back {
 	margin-top: 40px;
+}
+.save {
+	margin-top: 25px;
+}
+
+.settings {
+	text-align: left;
+}
+.settings label {
+	font-size: 24px;
+	font-weight: bold;
+}
+.settings input[type="text"] {
+	width: 100%;
+	font-size: 22px;
+	margin-bottom: 5px;
 }
