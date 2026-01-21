@@ -22,6 +22,33 @@
 			<h3>${HOSTNAME}</h3>
 			<h2>Control Config</h2>
 		</div>
+		<div class="settings">
+			<label for="protocol">Protocol:</label>
+			<select id="protocol">
+				<option value="sacn">sACN</option>
+				<option value="artnet">Art-Net</option>
+			</select>
+			<table id="addressing">
+				<tbody>
+					<tr>
+						<td><label for="net">Net:</label></td>
+						<td><input id="net" type="number" min="0" max="65535"></td>
+					</tr>
+					<tr>
+						<td><label for="sub-net">Sub-net:</label></td>
+						<td><input id="sub-net" type="number" min="0" max="65535"></td>
+					</tr>
+					<tr>
+						<td><label for="universe">Universe:</label></td>
+						<td><input id="universe" type="number" min="0" max="65535"></td>
+					</tr>
+					<tr>
+						<td><label for="address">Address:</label></td>
+						<td><input id="address" type="number" min="0" max="512"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div class="save">
 			<button type="button">Save</button>
 		</div>
