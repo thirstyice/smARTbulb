@@ -26,6 +26,9 @@ hr {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+#header {
+	margin-bottom: 30px;
+}
 
 button {
   /* background-color: #eee;
@@ -70,10 +73,10 @@ button {
 }
 
 .back {
-	margin-top: 40px;
+	margin-top: 25px;
 }
 .save {
-	margin-top: 25px;
+	margin-top: 20px;
 }
 
 .settings {
