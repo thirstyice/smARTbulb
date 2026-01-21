@@ -17,22 +17,9 @@
 #color {
 	margin-bottom: 20px;
 }
-
 #info table {
-	margin: auto;
 	width: 90%;
-	border-collapse: collapse;
-	table-layout: fixed;
-	margin-bottom: 10px;
 }
-
 #info td {
-	padding: 5px 3px;
 	border-top: 1px solid GrayText;
-}
-#info td:first-child {
-	text-align: right;
-}
-#info td:last-child {
-	text-align: left;
 }
