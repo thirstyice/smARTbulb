@@ -37,4 +37,10 @@ addEventListener("DOMContentLoaded", (event) => {
 			}
 		]
 	});
+	var overrideControl = document.getElementById("override");
+	overrideControl.addEventListener("click", function() {
+			this.classList.toggle("active");
+			// TODO: Also toggle data override
+			// And maybe add a big warning in the header when override is on
+		});
 });

@@ -44,7 +44,7 @@ button {
 	vertical-align: middle;
 }
 
-.collapse-control.active {
+.active {
 	background-color: SelectedItem;
 }
 .collapse-content {
