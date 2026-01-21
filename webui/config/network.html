@@ -34,14 +34,14 @@
 			<input id="pass2" type="text" placeholder="(unchanged)" maxlength="63">
 			<hr/>
 			<label for="ip">IP Address <small>(use 0.0.0.0 for DHCP)</small>:</label>
-			<input id="ip" type="text" value="${IP}">
+			<input id="ip" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="${IP}">
 			<label for="subnet">Subnet mask:</label>
-			<input id="subnet" type="text" value="${SUBNET}">
+			<input id="subnet" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="${SUBNET}">
 			<label for="gateway">Gateway:</label>
-			<input id="gateway" type="text" value="${GATEWAY}">
+			<input id="gateway" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="${GATEWAY}">
 			<hr/>
 			<label for="hostname">Hostname:</label>
-			<input id="hostname" type="text" value="${HOSTNAME}">
+			<input id="hostname" type="text" pattern="[a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]" value="${HOSTNAME}" maxlength="63">
 			<div>Also used for mDNS (hostname.local)</div>
 		</div>
 		<div class="save">
