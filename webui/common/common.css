@@ -13,7 +13,7 @@
 body {
 	font-family: sans-serif;
 	text-align: center;
-	width: 400px;
+	width: 300px;
 	margin: 20px auto;
 }
 
@@ -31,12 +31,12 @@ button {
   /* background-color: #eee;
   color: #444; */
   cursor: pointer;
-  padding: 18px 15px;
+  padding: 15px 15px;
 	margin-top: 15px;
   width: 100%;
   border: none;
   outline: none;
-  font-size: 30px;
+  font-size: 20px;
 	font-weight: bold;
 	vertical-align: middle;
 }
@@ -54,7 +54,7 @@ button {
 
 .collapse-control:after {
   content: '\25c0';
-  font-size: 20px;
+  font-size: 15px;
 	padding-top: 5px;
 	float: right;
   margin-left: 5px;
@@ -80,11 +80,11 @@ button {
 	text-align: left;
 }
 .settings label {
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: bold;
 }
 .settings input[type="text"] {
 	width: 100%;
-	font-size: 22px;
+	font-size: 15px;
 	margin-bottom: 5px;
 }
