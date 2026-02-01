@@ -1,3 +1,7 @@
+# smARTbulb-specific
+include/user-options.h
+
+
 # General
 .DS_Store
 __MACOSX/
