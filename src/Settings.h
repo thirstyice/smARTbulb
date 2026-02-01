@@ -20,7 +20,7 @@ enum section : unsigned char { __VA_ARGS__, End }; \
 const char* const section[section::End] = { STR_ARRAY(__VA_ARGS__)}; \
 }
 
-Preferences* getPrefs(const char* section);
+Preferences* Settings::getPrefs(const char* section);
 
 Settings(Network, ip, subnet, gateway, ssid1, pass1, ssid2, pass2, hostname);
 Settings(Light, type, gpio, chanmap, startcolor, connectcolor, noconnectcolor);
