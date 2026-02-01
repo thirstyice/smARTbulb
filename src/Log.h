@@ -14,20 +14,21 @@
 #include <Arduino.h>
 #include <Decorator.h>
 
-class Log {
-	Log(uint16_t lines = 250, uint8_t cols = 80) {
+#include "options.h"
 
-	}
-}
-
-class Logger : public Decorator<Print> {
-	protected:
-		uint16_t lines = 500;
-		uint8_t cols = 80;
-		char log[lines][cols];
-	public:
-		using Decorator::Decorator;
-		size_t write(uint8_t c) override;
-	};
-
-	extern Print* Log;
+class LogFileClass : public Decorator<Print> {
+	static char log[LOGLINES][LOGCOLS];
+	static uint16_t line;
+	static uint8_t col;
+	using Decorator::Decorator;
+	size_t write(uint8_t c) override;
+	/**
+	 * @brief Get lines from log
+	 * @param from  Which line to start from. 0 = Most recent
+	 * @param count How many lines to get
+	 * @return An array of pointers to the requested lines
+	 */
+	const char** const getPastLines(uint16_t from = 0, size_t count = LOGLINES-10);
+};
+extern LogFileClass LogFile;
+extern Print* logger;
