@@ -14,9 +14,11 @@
 
 #include "Networking.h"
 #include "Log.h"
-
+#include "Settings.h"
 
 namespace Networking {
+MakeSettings(Network, Ip, Subnet, Gateway, Ssid1, Pass1, Ssid2, Pass2, Hostname);
+
 
 IPAddress ip = INITIAL_IP;
 IPAddress gateway = INITIAL_GATEWAY;
@@ -47,7 +49,9 @@ void WiFiEvent(WiFiEvent_t event)
 				break;
 		case ARDUINO_EVENT_WIFI_STA_CONNECTED:
 				Log->println("WiFi connected");
-				connected = true;
+				if (ip != IPAddress(0)) {
+					connected = true;
+				}
 				break;
 		case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
 				Log->println("WiFi disconnect");
@@ -58,9 +62,6 @@ void WiFiEvent(WiFiEvent_t event)
 				break;
 		case ARDUINO_EVENT_WIFI_STA_GOT_IP:
 				Log->println("WiFi got IP");
-				ip = WiFi.localIP();
-				gateway = WiFi.gatewayIP();
-				subnet = WiFi.subnetMask();
 				connected = true;
 				break;
 		case ARDUINO_EVENT_WIFI_STA_LOST_IP:
@@ -73,8 +74,52 @@ void WiFiEvent(WiFiEvent_t event)
 	}
 }
 
+void getSettings() {
+	Preferences* prefs = Settings::getPrefs(setSection);
+	if (prefs->isKey(setIp)) {
+		ip = prefs->getULong(setIp, ip);
+	}
+	if (prefs->isKey(setSubnet)) {
+		subnet = prefs->getULong(setSubnet, subnet);
+	}
+	if (prefs->isKey(setGateway)) {
+		gateway = prefs->getULong(setGateway, gateway);
+	}
+	if (prefs->isKey(setSsid1)) {
+		wifiSSID1 = prefs->getString(setSsid1, wifiSSID1);
+	}
+	if (prefs->isKey(setPass1)) {
+		wifiPasscode1 = prefs->getString(setPass1, wifiPasscode1);
+	}
+	if (prefs->isKey(setSsid2)) {
+		wifiSSID2 = prefs->getString(setSsid2, wifiSSID2);
+	}
+	if (prefs->isKey(setPass2)) {
+		wifiPasscode2 = prefs->getString(setPass2, wifiPasscode2);
+	}
+	if (prefs->isKey(setHostname)) {
+		hostname = prefs->getString(setHostname, hostname);
+	}
+	prefs->end();
+}
+
+void saveSettings() {
+	Preferences* prefs = Settings::getPrefs(setSection);
+	prefs->putULong(setIp, ip);
+	prefs->putULong(setSubnet, subnet);
+	prefs->putULong(setGateway, gateway);
+	prefs->putString(setSsid1, wifiSSID1);
+	prefs->putString(setPass1, wifiPasscode1);
+	prefs->putString(setSsid2, wifiSSID2);
+	prefs->putString(setPass2, wifiPasscode2);
+	prefs->putString(setHostname, hostname);
+	prefs->end();
+}
+
+
 void setupNetworking() {
 	Log->println("Setup Network");
+	getSettings();
 	WiFi.onEvent(WiFiEvent);
 	WiFi.setHostname(hostname.c_str());
 	WiFi.enableSTA(true);

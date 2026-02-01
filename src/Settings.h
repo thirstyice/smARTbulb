@@ -15,13 +15,14 @@
 #include <Preferences.h>
 #include "macros.h"
 
-#define Settings(section, ...) namespace Settings { \
-enum section : unsigned char { __VA_ARGS__, End }; \
-const char* const section[section::End] = { STR_ARRAY(__VA_ARGS__)}; \
-}
+#define DEFINE_SETTING(x) const char* const (set ## x) = STRINGIFY(x);
+#define SETTINGS(...) FOR_EACH(DEFINE_SETTING, __VA_ARGS__)
+#define MakeSettings(section, ...) SETTINGS(__VA_ARGS__) \
+const char* const setSection = STRINGIFY(section);
 
-Preferences* Settings::getPrefs(const char* section);
+namespace Settings {
+	Preferences* getPrefs(const char* section);
+} // namespace Settings
 
-Settings(Network, ip, subnet, gateway, ssid1, pass1, ssid2, pass2, hostname);
-Settings(Light, type, gpio, chanmap, startcolor, connectcolor, noconnectcolor);
-Settings(Control, protocol, net, subnet, universe, address);
+// Settings(Light, type, gpio, chanmap, startcolor, connectcolor, noconnectcolor);
+// Settings(Control, protocol, net, subnet, universe, address);
