@@ -9,29 +9,25 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-#define ETH_PHY_TYPE        ETH_PHY_LAN8720
-#define ETH_PHY_ADDR         1
-#define ETH_PHY_MDC         23
-#define ETH_PHY_MDIO        18
-#define ETH_PHY_POWER       -1
-#define ETH_CLK_MODE        ETH_CLOCK_GPIO17_OUT
 
+#include "options.h"
 
 #include "Networking.h"
+#include "Log.h"
 
 
 namespace Networking {
 
-IPAddress ip = IPAddress(192,168,0,201);
-IPAddress gateway = IPAddress(192,168,0,1);
-IPAddress subnet = IPAddress(255,255,255,0);
+IPAddress ip = INITIAL_IP;
+IPAddress gateway = INITIAL_GATEWAY;
+IPAddress subnet = INITIAL_SUBNET;
 bool connected = false;
 
-String wifiSSID1 = "Test";
-String wifiPasscode1 = "password";
-String wifiSSID2 = "network";
-String wifiPasscode2 = "password";
-String hostname = "smARTbulb";
+String wifiSSID1 = WIFI_INITIAL_SSID;
+String wifiPasscode1 = WIFI_INITIAL_PASS;
+String wifiSSID2 = WIFI_INITIAL_SSID2;
+String wifiPasscode2 = WIFI_INITIAL_PASS2;
+String hostname = INITIAL_HOSTNAME;
 
 // WARNING: WiFiEvent is called from a separate FreeRTOS task (thread)!
 void WiFiEvent(WiFiEvent_t event)
@@ -83,7 +79,7 @@ void setupNetworking() {
 	WiFi.setHostname(hostname.c_str());
 	WiFi.enableSTA(true);
 	WiFi.STA.setDefault();
-	WiFi.begin(wifiSSID, wifiPasscode);
+	WiFi.begin(wifiSSID1, wifiPasscode1);
 	WiFi.config(ip, gateway, subnet);
 }
 
