@@ -66,6 +66,25 @@
 #endif
 
 /**
+** @brief How long to try to connect to wifi before switching to AP mode
+**
+**/
+#ifndef WIFI_TIMEOUT
+	#define WIFI_TIMEOUT 30000
+#endif
+
+/**
+** @brief AP settings
+**
+**/
+#ifndef AP_SSID
+	#define AP_SSID "smARTbulb"
+#endif
+#ifndef AP_PASS
+	#define AP_PASS "smartbulb"
+#endif
+
+/**
 ** @brief Logging options
 **
 **/

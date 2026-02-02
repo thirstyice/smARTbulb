@@ -19,5 +19,5 @@ extern bool connected;
 extern IPAddress ip, gateway, subnet;
 extern String wifiSSID1, wifiPasscode1, wifiSSID2, wifiPasscode2;
 
-void setupNetworking();
+void networkingTask(void*);
 }

@@ -1,10 +1,19 @@
 #include <Arduino.h>
+#include "Networking.h"
+
+TaskHandle_t NetworkTaskHandle;
 
 void setup() {
 	Serial.begin(115200);
-	// Read settings
 	// Set up Light
-	// Attempt to set up wifi. If that fails, create AP
+	xTaskCreate(
+		Networking::networkingTask,
+		"Networking",
+		256,
+		NULL,
+		2,
+		&NetworkTaskHandle
+	);
 	// Start web server
 	// Set up to receive data
 }
