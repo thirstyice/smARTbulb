@@ -17,6 +17,8 @@
 
 #include "user-options.h"
 
+#include "smartbulb-version.h"
+
 /**
 ** @brief Ethernet type
 **
