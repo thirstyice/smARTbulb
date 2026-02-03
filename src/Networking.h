@@ -10,6 +10,7 @@
 *                                                                              *
 *******************************************************************************/
 #pragma once
+#include "options.h"
 
 #include <Arduino.h>
 #include <WiFi.h>

@@ -9,9 +9,6 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-
-#include "options.h"
-
 #include "Networking.h"
 #include "Log.h"
 #include "Settings.h"

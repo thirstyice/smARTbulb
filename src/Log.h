@@ -10,11 +10,10 @@
 *                                                                              *
 *******************************************************************************/
 #pragma once
+#include "options.h"
 
 #include <Arduino.h>
 #include <Decorator.h>
-
-#include "options.h"
 
 class LogFileClass : public Decorator<Print> {
 	static char log[LOGLINES][LOGCOLS];
