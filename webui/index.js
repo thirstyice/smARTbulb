@@ -21,6 +21,7 @@ var ws;
 var wsConnected = false;
 
 var liveInfo = [];
+var infoRequest;
 
 function updateLiveData() {
 	let live = [];
@@ -44,7 +45,7 @@ function requestData() {
 		return;
 	}
 	ws.send(JSON.stringify(liveInfo));
-	setTimeout(requestData, 1000);
+	infoRequest = setTimeout(requestData, 1500);
 	updateLiveData();
 }
 
@@ -57,6 +58,7 @@ function wsClose(event) {
 	setTimeout(beginWebSocket, 1500);
 }
 function wsMessage(event) {
+	clearTimeout(infoRequest);
 	let data = JSON.parse(event.data);
 	console.debug("WebSocket data received");
 	console.debug(data);
@@ -84,6 +86,7 @@ function wsMessage(event) {
 	for (key in data) {
 		document.getElementById(key).innerHTML = data[key];
 	}
+	infoRequest = setTimeout(requestData, 1000);
 }
 function wsError(event) {
 	console.warn("WebSocket error!");
