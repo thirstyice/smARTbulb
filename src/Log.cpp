@@ -27,21 +27,20 @@ size_t LogFileClass::write(uint8_t c) {
 	}
 	return pointer->write(c);
 }
-const char** const LogFileClass::getPastLines(uint16_t startLine, size_t count) {
-	char* out[count];
+const char** LogFileClass::getPastLines(const char** arr, uint16_t startLine, size_t count) {
 	if (startLine > line) {
 		startLine = LOGLINES-(startLine-line);
 	} else {
 		startLine = line-startLine;
 	}
 	for (uint16_t i=0; i<count; i++) {
-		out[i] = log[startLine];
+		arr[i] = log[startLine];
 		if (startLine == 0) {
 			startLine = LOGLINES;
 		}
 		startLine--;
 	}
-	return out;
+	return arr;
 }
 
 LogFileClass LogFile{&Serial};

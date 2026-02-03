@@ -23,11 +23,12 @@ class LogFileClass : public Decorator<Print> {
 	size_t write(uint8_t c) override;
 	/**
 	 * @brief Get lines from log
+	 * @param arr Array to copy pointers into
 	 * @param from  Which line to start from. 0 = Most recent
 	 * @param count How many lines to get
 	 * @return An array of pointers to the requested lines
 	 */
-	const char** const getPastLines(uint16_t from = 0, size_t count = LOGLINES-10);
+	const char** getPastLines(const char** arr, uint16_t from = 0, size_t count = LOGLINES-10);
 };
 extern LogFileClass LogFile;
 extern Print* logger;
