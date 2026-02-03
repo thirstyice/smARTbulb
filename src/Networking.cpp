@@ -12,6 +12,7 @@
 #include "Networking.h"
 #include "Log.h"
 #include "Settings.h"
+#include "WebUi.h"
 
 #include <WiFiMulti.h>
 
@@ -161,9 +162,11 @@ void networkingTask(void*) {
 	while (wifiMulti.run() != WL_CONNECTED) {
 		if (millis() - beginTime > WIFI_TIMEOUT) {
 			useAPMode();
+			WebUi::begin();
 			return;
 		}
 	}
+	WebUi::begin();
 	while (true) {
 		wifiMulti.run();
 		vTaskDelay(2000);

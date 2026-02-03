@@ -1,10 +1,16 @@
 #include <Arduino.h>
 #include "Networking.h"
+#include <LittleFS.h>
 
 TaskHandle_t NetworkTaskHandle;
 
 void setup() {
 	Serial.begin(115200);
+	#ifdef ESP32
+		LittleFS.begin(true);
+	#else
+		LittleFS.begin();
+	#endif
 	// Set up Light
 	xTaskCreate(
 		Networking::networkingTask,
@@ -14,7 +20,6 @@ void setup() {
 		2,
 		&NetworkTaskHandle
 	);
-	// Start web server
 	// Set up to receive data
 }
 
