@@ -15,10 +15,10 @@
 #include <Preferences.h>
 #include "macros.h"
 
-#define DEFINE_SETTING(x) const char* const (set ## x) = STRINGIFY(x);
+#define DEFINE_SETTING(x) const char* const (set ## x) = __STRINGIFY(x);
 #define SETTINGS(...) FOR_EACH(DEFINE_SETTING, __VA_ARGS__)
 #define MakeSettings(section, ...) SETTINGS(__VA_ARGS__) \
-const char* const setSection = STRINGIFY(section);
+const char* const setSection = __STRINGIFY(section);
 
 namespace Settings {
 	Preferences* getPrefs(const char* section);

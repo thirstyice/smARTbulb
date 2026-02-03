@@ -38,11 +38,13 @@
 /**
 ** @brief Transforms the argument into a string
 **/
-#define STRINGIFY(x) #x
+#ifndef __STRINGIFY
+	#define __STRINGIFY(x) #x
+#endif
 
-#define _STR_ARRAY(x) , STRINGIFY(x)
+#define _STR_ARRAY(x) , __STRINGIFY(x)
 /**
 ** @brief Transforms the arguments into a list of strings,
 ** e.g. for array initialization
 **/
-#define STR_ARRAY(x, ...) STRINGIFY(x) __VA_OPT__(FOR_EACH(_STR_ARRAY, __VA_ARGS__))
+#define STR_ARRAY(x, ...) __STRINGIFY(x) __VA_OPT__(FOR_EACH(_STR_ARRAY, __VA_ARGS__))
