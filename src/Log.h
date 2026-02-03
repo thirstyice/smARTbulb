@@ -19,6 +19,7 @@ class LogFileClass : public Decorator<Print> {
 	static char log[LOGLINES][LOGCOLS];
 	static uint16_t line;
 	static uint8_t col;
+public:
 	using Decorator::Decorator;
 	size_t write(uint8_t c) override;
 	/**

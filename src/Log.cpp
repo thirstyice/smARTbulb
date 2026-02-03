@@ -13,6 +13,7 @@
 
 uint16_t LogFileClass::line = 0;
 uint8_t LogFileClass::col = 0;
+char LogFileClass::log[LOGLINES][LOGCOLS];
 
 size_t LogFileClass::write(uint8_t c) {
 	log[line][col] = c;
