@@ -9,6 +9,7 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
+#pragma once
 /**
 ** @file
 ** @brief Enable / disable features + compile-time options

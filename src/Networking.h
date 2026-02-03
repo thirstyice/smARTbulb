@@ -9,6 +9,7 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
+#pragma once
 
 #include <Arduino.h>
 #include <WiFi.h>

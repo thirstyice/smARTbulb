@@ -9,7 +9,7 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-
+#pragma once
 /**
 ** @file
 ** @brief Assorted handy macros
