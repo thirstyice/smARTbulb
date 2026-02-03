@@ -22,43 +22,55 @@
 	</head>
 	<body>
 		<div id="header">
-			<h2>${HOSTNAME}</h2>
-			<h3>${IP}</h3>
+			<h2>%HOSTNAME%</h2>
+			<h3 class="live" id="ip">%IP%</h3>
 		</div>
-		<div id="color">
+		<table class="live" id="color" style="background-color: #000;">
+			<tbody>
+				<tr>
+					<td id="rgbvalue"></td>
+					<td id="whitevalue"></td>
+				</tr>
+			</tbody>
+		</table>
+		<div id="pickers">
 			<div id="color-picker" class="picker"></div>
 			<div id="white-picker" class="picker"></div>
 		</div>
+		<button id="override" type="button" style="display: none;">Override incoming data</button>
 		<a href="/config/index.html"><button type="button">Configuration</button></a>
-		<button id="override" type="button">Override incoming data</button>
-		<button type="button" class="collapse-control">Information</button>
+		<button type="button" class="collapse-control" id="info-control">Information</button>
 		<div id="info" class="collapse-content">
-			<h3>smARTbulb ${VERSION}</h3>
+			<h3>smARTbulb %VERSION%</h3>
 			<table>
 				<tbody>
 					<tr>
 						<td>SSID:</td>
-						<td>${SSID}</td>
+						<td class="info" id="ssid">Loading...</td>
 					</tr>
 					<tr>
 						<td>Signal:</td>
-						<td>${SIGNAL}</td>
+						<td class="info" id="signal">Loading...</td>
 					</tr>
 					<tr>
 						<td>Data source:</td>
-						<td>${DATA_SOURCE}</td>
+						<td class="live" id="source">Loading...</td>
 					</tr>
 					<tr>
 						<td>Universe:</td>
-						<td>${UNIVERSE}</td>
+						<td class="info" id="universe">Loading...</td>
 					</tr>
 					<tr>
 						<td>Address:</td>
-						<td>${DMX_ADDRESS}</td>
+						<td class="info" id="address">Loading...</td>
+					</tr>
+					<tr>
+						<td>Values:</td>
+						<td class="info" id="values">Loading...</td>
 					</tr>
 					<tr>
 						<td>Last Received:</td>
-						<td>${RECEIVED}</td>
+						<td class="info" id="received">Loading...</td>
 					</tr>
 				</tbody>
 			</table>

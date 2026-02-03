@@ -11,10 +11,14 @@
 *******************************************************************************/
 
 .picker {
-	margin-top: 30px;
+	margin-top: 15px;
 }
 
 #color {
+	height: 50px;
+}
+
+#pickers {
 	margin-bottom: 20px;
 }
 #info table {
