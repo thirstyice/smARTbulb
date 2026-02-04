@@ -15,6 +15,7 @@
 #include "WebUi.h"
 
 #include <WiFiMulti.h>
+#include <DNSServer.h>
 
 namespace Networking {
 MakeSettings(Network, Ip, Subnet, Gateway, Ssid1, Pass1, Ssid2, Pass2, Hostname, APssid, APpass);
@@ -35,6 +36,8 @@ String hostname = INITIAL_HOSTNAME;
 
 String apSSID = AP_SSID;
 String apPass = AP_PASS;
+
+DNSServer dnsServer;
 
 
 // WARNING: WiFiEvent is called from a separate FreeRTOS task (thread)!
@@ -140,6 +143,7 @@ void useAPMode() {
 		Log->println("AP mode failure! Will try again");
 		vTaskDelay(1000);
 	}
+	dnsServer.start(53, "*", WiFi.softAPIP());
 }
 
 void networkingTask(void*) {
