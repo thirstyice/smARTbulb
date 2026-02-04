@@ -23,8 +23,8 @@ AsyncWebSocketMessageHandler wsHandler;
 AsyncWebSocket ws("/ws", wsHandler.eventHandler());
 
 void begin() {
-	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-		request->send(LittleFS, request->url(), "text/html", false, [=](const String &var) -> String {
+	server.on("*.html", HTTP_GET, [](AsyncWebServerRequest *request) {
+		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "HOSTNAME") {
 				return WiFi.getHostname();
 			}
@@ -54,6 +54,10 @@ void begin() {
 			return emptyString;
 		});
 	});
+	server.on("", HTTP_GET, [](AsyncWebServerRequest *request) {
+		request->send(LittleFS, "/webui" + request->url());
+	});
+	server.rewrite("/", "/index.html");
 
 	wsHandler.onConnect([](AsyncWebSocket *server, AsyncWebSocketClient *client) {
 
