@@ -6,11 +6,7 @@ TaskHandle_t NetworkTaskHandle;
 
 void setup() {
 	Serial.begin(115200);
-	#ifdef ESP32
-		LittleFS.begin(true);
-	#else
-		LittleFS.begin();
-	#endif
+	LittleFS.begin();
 	// Set up Light
 	xTaskCreate(
 		Networking::networkingTask,
