@@ -151,8 +151,9 @@ void networkingTask(void*) {
 	Log->println("Begin Network");
 	uint8_t mac[6];
 	WiFi.macAddress(mac);
+	hostname += "-";
 	for (uint8_t i = 3; i<6; i++) {
-		hostname += mac[i];
+		hostname += String(mac[i], 16);
 	}
 	getSettings();
 	WiFi.onEvent(WiFiEvent);
