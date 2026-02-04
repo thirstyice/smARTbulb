@@ -101,7 +101,6 @@ function beginWebSocket() {
 }
 
 addEventListener("DOMContentLoaded", (event) => {
-	const colors = "%RGBCW%";
 	beginWebSocket();
 	if (colors.includes("R") && colors.includes("G") && colors.includes("B")) {
 		colorPicker = new iro.ColorPicker("#color-picker", {

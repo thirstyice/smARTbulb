@@ -20,7 +20,7 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "test": "http-server ./webui -p 8080 -a 127.0.0.1 -c-1 -o"
+    "test": "http-server ./data/webui -p 8080 -a 127.0.0.1 -c-1 -o"
   },
   "devDependencies": {
     "http-server": "^14.1.1"
