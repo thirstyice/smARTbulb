@@ -108,7 +108,6 @@ addEventListener("DOMContentLoaded", (event) => {
 			color: "#f0f",
 			wheelLightness: false,
 		});
-		document.getElementById("color").appendChild()
 	} else {
 		let colorLayout = [];
 		if (colors.includes("R")) {
