@@ -163,7 +163,9 @@ void networkingTask(void*) {
 		if (millis() - beginTime > WIFI_TIMEOUT) {
 			useAPMode();
 			WebUi::begin();
-			return;
+			while (true) {
+				vTaskDelay(1000);
+			}
 		}
 	}
 	WebUi::begin();
