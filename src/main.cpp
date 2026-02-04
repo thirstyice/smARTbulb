@@ -15,7 +15,7 @@ void setup() {
 	xTaskCreate(
 		Networking::networkingTask,
 		"Networking",
-		256,
+		4096,
 		NULL,
 		2,
 		&NetworkTaskHandle
