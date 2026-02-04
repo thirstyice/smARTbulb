@@ -73,7 +73,7 @@
 **
 **/
 #ifndef WIFI_TIMEOUT
-	#define WIFI_TIMEOUT 30000
+	#define WIFI_TIMEOUT 20000
 #endif
 
 /**
