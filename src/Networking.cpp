@@ -18,27 +18,25 @@
 #include <DNSServer.h>
 
 namespace Networking {
-MakeSettings(Network, Ip, Subnet, Gateway, Ssid1, Pass1, Ssid2, Pass2, Hostname, APssid, APpass);
+const char* const setSection = "network";
+MakeSettings(
+	(IPAddress, ip, INITIAL_IP),
+	(IPAddress, gateway, INITIAL_GATEWAY),
+	(IPAddress, subnet, INITIAL_SUBNET),
+	(String, wifiSSID1, WIFI_INITIAL_SSID),
+	(String, wifiPasscode1, WIFI_INITIAL_PASS),
+	(String, wifiSSID2, WIFI_INITIAL_SSID2),
+	(String, wifiPasscode2, WIFI_INITIAL_PASS2),
+	(String, hostname, INITIAL_HOSTNAME),
+	(String, apSSID, AP_SSID),
+	(String, apPass, AP_PASS)
+);
 
-
-IPAddress ip = INITIAL_IP;
-IPAddress gateway = INITIAL_GATEWAY;
-IPAddress subnet = INITIAL_SUBNET;
 bool connected = false;
 
 WiFiMulti wifiMulti;
 
-String wifiSSID1 = WIFI_INITIAL_SSID;
-String wifiPasscode1 = WIFI_INITIAL_PASS;
-String wifiSSID2 = WIFI_INITIAL_SSID2;
-String wifiPasscode2 = WIFI_INITIAL_PASS2;
-String hostname = INITIAL_HOSTNAME;
-
-String apSSID = AP_SSID;
-String apPass = AP_PASS;
-
 DNSServer dnsServer;
-
 
 // WARNING: WiFiEvent is called from a separate FreeRTOS task (thread)!
 void WiFiEvent(WiFiEvent_t event)
@@ -58,7 +56,7 @@ void WiFiEvent(WiFiEvent_t event)
 				break;
 		case ARDUINO_EVENT_WIFI_STA_CONNECTED:
 				Log->println("WiFi connected");
-				if (ip != IPAddress(0UL)) {
+				if (ip.val != IPAddress(0UL)) {
 					connected = true;
 				}
 				break;
@@ -86,51 +84,17 @@ void WiFiEvent(WiFiEvent_t event)
 
 void getSettings() {
 	Preferences* prefs = Settings::getPrefs(setSection);
-	if (prefs->isKey(setIp)) {
-		ip = prefs->getULong(setIp, ip);
-	}
-	if (prefs->isKey(setSubnet)) {
-		subnet = prefs->getULong(setSubnet, subnet);
-	}
-	if (prefs->isKey(setGateway)) {
-		gateway = prefs->getULong(setGateway, gateway);
-	}
-	if (prefs->isKey(setSsid1)) {
-		wifiSSID1 = prefs->getString(setSsid1, wifiSSID1);
-	}
-	if (prefs->isKey(setPass1)) {
-		wifiPasscode1 = prefs->getString(setPass1, wifiPasscode1);
-	}
-	if (prefs->isKey(setSsid2)) {
-		wifiSSID2 = prefs->getString(setSsid2, wifiSSID2);
-	}
-	if (prefs->isKey(setPass2)) {
-		wifiPasscode2 = prefs->getString(setPass2, wifiPasscode2);
-	}
-	if (prefs->isKey(setHostname)) {
-		hostname = prefs->getString(setHostname, hostname);
-	}
-	if (prefs->isKey(setAPssid)) {
-		apSSID = prefs->getString(setAPssid, apSSID);
-	}
-	if (prefs->isKey(setAPpass)) {
-		apPass = prefs->getString(setAPpass, apPass);
+	for (auto const& setting : settings) {
+		setting->get(prefs);
 	}
 	prefs->end();
 }
 
 void saveSettings() {
 	Preferences* prefs = Settings::getPrefs(setSection);
-	prefs->putULong(setIp, ip);
-	prefs->putULong(setSubnet, subnet);
-	prefs->putULong(setGateway, gateway);
-	prefs->putString(setSsid1, wifiSSID1);
-	prefs->putString(setPass1, wifiPasscode1);
-	prefs->putString(setSsid2, wifiSSID2);
-	prefs->putString(setPass2, wifiPasscode2);
-	prefs->putString(setHostname, hostname);
-	prefs->putString(setAPssid, apSSID);
-	prefs->putString(setAPpass, apPass);
+	for (auto const& setting : settings) {
+		setting->put(prefs);
+	}
 	prefs->end();
 }
 
@@ -139,7 +103,7 @@ void useAPMode() {
 	WiFi.disconnect();
 	WiFi.enableSTA(false);
 	WiFi.enableAP(true);
-	while (!WiFi.softAP(apSSID, apPass)) {
+	while (!WiFi.softAP(apSSID.val, apPass.val)) {
 		Log->println("AP mode failure! Will try again");
 		vTaskDelay(1000);
 	}
@@ -151,18 +115,18 @@ void networkingTask(void*) {
 	Log->println("Begin Network");
 	uint8_t mac[6];
 	WiFi.macAddress(mac);
-	hostname += "-";
+	hostname.val += "-";
 	for (uint8_t i = 3; i<6; i++) {
-		hostname += String(mac[i], 16);
+		hostname.val += String(mac[i], 16);
 	}
 	getSettings();
 	WiFi.onEvent(WiFiEvent);
-	WiFi.setHostname(hostname.c_str());
+	WiFi.setHostname(hostname.val.c_str());
 	WiFi.enableSTA(true);
 	WiFi.STA.setDefault();
-	WiFi.config(ip, gateway, subnet);
-	wifiMulti.addAP(wifiSSID1.c_str(), wifiPasscode1.c_str());
-	wifiMulti.addAP(wifiSSID2.c_str(), wifiPasscode2.c_str());
+	WiFi.config(ip.val, gateway.val, subnet.val);
+	wifiMulti.addAP(wifiSSID1.val.c_str(), wifiPasscode1.val.c_str());
+	wifiMulti.addAP(wifiSSID2.val.c_str(), wifiPasscode2.val.c_str());
 	beginTime = millis();
 	while (wifiMulti.run() != WL_CONNECTED) {
 		if (millis() - beginTime > WIFI_TIMEOUT) {
