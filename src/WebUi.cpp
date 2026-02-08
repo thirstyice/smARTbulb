@@ -34,25 +34,21 @@ void begin() {
 				if (var == "VERSION") {
 					return SMARTBULB_VERSION_STR;
 				}
-				if (request->url().startsWith("/config")) {
-					if (var == "IP") {
-						return Networking::ip.toString();
-					}
-					if (var == "SSID1") {
-						return Networking::wifiSSID1;
-					}
-					if (var == "SSID2") {
-						return Networking::wifiSSID2;
-					}
-					if (var == "SUBNET") {
-						return Networking::subnet.toString();
-					}
-					if (var == "GATEWAY") {
-						return Networking::gateway.toString();
-					}
-				}
 				if (var == "IP") {
 					return WiFi.localIP().toString();
+				}
+				if (request->url().startsWith("/config/")) {
+					String page = request->url();
+					page.remove(page.indexOf(".htm"));
+					page = page.substring(page.lastIndexOf("/"));
+					if (Section::sections.contains(page.c_str())) {
+						for (uint8_t i=0; i<Section::sections[page.c_str()].size; i++) {
+							Settings* setting = Section::sections[page.c_str()].array[i];
+							if (var == setting->getKey()) {
+								return setting->getAsString();
+							}
+						}
+					}
 				}
 				return emptyString;
 			});
