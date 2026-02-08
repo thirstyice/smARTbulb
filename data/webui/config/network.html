@@ -24,26 +24,31 @@
 			<h2>Network Config</h2>
 		</div>
 		<div id="settings">
-			<label for="ssid1">Primary SSID:</label>
-			<input id="ssid1" type="text" value="%SSID1%" maxlength="32">
-			<label for="pass1">Primary Password:</label>
-			<input id="pass1" type="text" placeholder="(unchanged)" maxlength="63">
+			<label for="wifiSSID1">Primary SSID:</label>
+			<input id="wifiSSID1" type="text" value="%wifiSSID1%" maxlength="32">
+			<label for="wifiPasscode1">Primary Password:</label>
+			<input id="wifiPasscode1" type="text" placeholder="(unchanged)" maxlength="63">
 			<hr/>
-			<label for="ssid2">Secondary SSID:</label>
-			<input id="ssid2" type="text" value="%SSID2%" maxlength="32">
-			<label for="pass2">Secondary Password:</label>
-			<input id="pass2" type="text" placeholder="(unchanged)" maxlength="63">
+			<label for="wifiSSID2">Secondary SSID:</label>
+			<input id="wifiSSID2" type="text" value="%wifiSSID2%" maxlength="32">
+			<label for="wifiPasscode2">Secondary Password:</label>
+			<input id="wifiPasscode2" type="text" placeholder="(unchanged)" maxlength="63">
 			<hr/>
 			<label for="ip">IP Address <small>(use 0.0.0.0 for DHCP)</small>:</label>
-			<input id="ip" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="%IP%">
+			<input id="ip" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="%ip%">
 			<label for="subnet">Subnet mask:</label>
-			<input id="subnet" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="%SUBNET%">
+			<input id="subnet" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="%subnet%">
 			<label for="gateway">Gateway:</label>
-			<input id="gateway" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="%GATEWAY%">
+			<input id="gateway" type="text" pattern="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" value="%gateway%">
 			<hr/>
 			<label for="hostname">Hostname:</label>
-			<input id="hostname" type="text" pattern="[a-zA-Z0-9][\-a-zA-Z0-9]*[a-zA-Z0-9]" value="%HOSTNAME%" maxlength="63">
+			<input id="hostname" type="text" pattern="[a-zA-Z0-9][\-a-zA-Z0-9]*[a-zA-Z0-9]" value="%hostname%" maxlength="63">
 			<div>Also used for mDNS (hostname.local)</div>
+			<hr/>
+			<label for="apSSID">Access point SSID:</label>
+			<input id="apSSID" type="text" value="%apSSID%" maxlength="32">
+			<label for="apPass">Access point Password:</label>
+			<input id="apPass" type="text" placeholder="(unchanged)" maxlength="63">
 		</div>
 		<div class="save">
 			<button id="saveButton" type="button">Save</button>
