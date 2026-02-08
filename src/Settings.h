@@ -13,6 +13,7 @@
 
 #include <Arduino.h>
 #include <Preferences.h>
+#include <ArxContainer.h>
 #include "macros.h"
 
 #define DEFINE_SETTING(type, name, value) SettingsType<type> name = SettingsType<type>{__STRINGIFY(name), type(value)}
@@ -21,8 +22,10 @@
 #define _SETTING_ARRAY(setting) , SETTING_NAME ## setting
 #define SETTING_ARRAY(first, ...)  SETTING_NAME ## first FOR_EACH(_SETTING_ARRAY, __VA_ARGS__)
 
-#define MakeSettings(...) FOR_EACH(_DEFINE_SETTING, __VA_ARGS__) \
-	Settings* settings[] = {SETTING_ARRAY(__VA_ARGS__)}
+#define MakeSettings(sectionName, ...) FOR_EACH(_DEFINE_SETTING, __VA_ARGS__) \
+	Settings* settings[] = {SETTING_ARRAY(__VA_ARGS__)}; \
+	Section setSection{sectionName, settings, sizeof(settings)/sizeof(Settings*)}
+
 
 class Settings {
 private:
@@ -38,8 +41,23 @@ public:
 		prefsObj.end();
 		return getPrefs(section);
 	}
+	const char* const getKey() {return key;}
 	virtual bool get(Preferences* prefs) =0;
 	virtual bool put(Preferences* prefs) =0;
+	virtual bool setFromString(String&) =0;
+	virtual String getAsString() =0;
+};
+
+struct SettingsArray {
+	Settings** array;
+	size_t size;
+	SettingsArray(Settings** _array, size_t _size) : array(_array), size(_size) {}
+};
+
+struct Section {
+	static std::map<const char* const, SettingsArray> sections;
+	const char* const name;
+	Section(const char* const _name, Settings** array, size_t size) : name(_name) {sections[name] = SettingsArray(array, size);}
 };
 
 template <typename T>
@@ -54,7 +72,7 @@ protected:
 public:
 	SettingsTypeBase(const char* _key, T _val) : Settings(_key), var(_val) {}
 
-	bool get(Preferences* prefs) override {
+	virtual bool get(Preferences* prefs) override {
 		if (!prefs->isKey(key)) {
 			return true;
 		}
@@ -69,7 +87,7 @@ public:
 		return false;
 	}
 
-	bool put(Preferences* prefs) override {
+	virtual bool put(Preferences* prefs) override {
 		B buffer;
 		buffer.var = var;
 		if (prefs->putBytes(key, buffer.byte, size) == size) {
@@ -77,7 +95,27 @@ public:
 		}
 		return false;
 	}
+
+	virtual bool setFromString(String& string) override {
+		if (std::is_integral<T>) {
+			var = string.toInt();
+			return true;
+		}
+		if (std::is_floating_point<T>) {
+			if (size == sizeof(double)) {
+				var = string.toDouble();
+			} else {
+				var = string.toFloat();
+			}
+			return true;
+		}
+		return false;
+	}
+	virtual String getAsString() override {
+		return String(var);
+	};
 };
+
 
 template <typename T>
 class SettingsType : public SettingsTypeBase<T> { // Default interface
@@ -104,6 +142,13 @@ public:
 		var = uint32_t(val);
 		return SettingsTypeBase<uint32_t>::put(prefs);
 	}
+
+	bool setFromString(String& string) override {
+		return val.fromString(string);
+	}
+	String getAsString() override {
+		return val.toString();
+	}
 };
 
 template<>
@@ -121,6 +166,14 @@ public:
 			return false;
 		}
 		return true;
+	}
+
+	bool setFromString(String& string) override {
+		var = string;
+		return true;
+	}
+	String getAsString() override {
+		return var;
 	}
 };
 

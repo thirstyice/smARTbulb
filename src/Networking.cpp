@@ -17,9 +17,10 @@
 #include <WiFiMulti.h>
 #include <DNSServer.h>
 
+
 namespace Networking {
-const char* const setSection = "network";
-MakeSettings(
+
+MakeSettings("network",
 	(IPAddress, ip, INITIAL_IP),
 	(IPAddress, gateway, INITIAL_GATEWAY),
 	(IPAddress, subnet, INITIAL_SUBNET),
@@ -83,7 +84,7 @@ void WiFiEvent(WiFiEvent_t event)
 }
 
 void getSettings() {
-	Preferences* prefs = Settings::getPrefs(setSection);
+	Preferences* prefs = Settings::getPrefs(setSection.name);
 	for (auto const& setting : settings) {
 		setting->get(prefs);
 	}
@@ -91,7 +92,7 @@ void getSettings() {
 }
 
 void saveSettings() {
-	Preferences* prefs = Settings::getPrefs(setSection);
+	Preferences* prefs = Settings::getPrefs(setSection.name);
 	for (auto const& setting : settings) {
 		setting->put(prefs);
 	}

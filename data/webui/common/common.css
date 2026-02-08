@@ -79,14 +79,14 @@ button {
 	margin-top: 20px;
 }
 
-.settings {
+#settings {
 	text-align: left;
 }
-.settings label {
+#settings label {
 	font-size: 20px;
 	font-weight: bold;
 }
-.settings input[type="text"], .settings select {
+#settings input[type="text"], #settings select {
 	width: 100%;
 	font-size: 15px;
 	margin-bottom: 5px;

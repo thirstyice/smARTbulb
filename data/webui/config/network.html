@@ -16,17 +16,18 @@
 		<meta name="color-scheme" content="dark light">
 		<link rel="stylesheet" href="/common/common.css"/>
 		<script src="/common/common.js"></script>
+		<script src="config.js"></script>
 	</head>
 	<body>
 		<div id="header">
 			<h3>%HOSTNAME%</h3>
 			<h2>Network Config</h2>
 		</div>
-		<div class="settings">
-			<label for="ssid">Primary SSID:</label>
-			<input id="ssid" type="text" value="%SSID1%" maxlength="32">
-			<label for="pass">Primary Password:</label>
-			<input id="pass" type="text" placeholder="(unchanged)" maxlength="63">
+		<div id="settings">
+			<label for="ssid1">Primary SSID:</label>
+			<input id="ssid1" type="text" value="%SSID1%" maxlength="32">
+			<label for="pass1">Primary Password:</label>
+			<input id="pass1" type="text" placeholder="(unchanged)" maxlength="63">
 			<hr/>
 			<label for="ssid2">Secondary SSID:</label>
 			<input id="ssid2" type="text" value="%SSID2%" maxlength="32">
@@ -45,7 +46,7 @@
 			<div>Also used for mDNS (hostname.local)</div>
 		</div>
 		<div class="save">
-			<button type="button">Save</button>
+			<button id="saveButton" type="button">Save</button>
 		</div>
 		<div class="back">
 			<a href="/config/index.html"><button type="button">Back</button></a>

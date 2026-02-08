@@ -14,7 +14,9 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
+#include <ArduinoJson.h>
 
+#include "Settings.h"
 #include "Networking.h"
 
 namespace WebUi {
@@ -74,6 +76,31 @@ void begin() {
 
 	wsHandler.onMessage([](AsyncWebSocket *server, AsyncWebSocketClient *client, const uint8_t *data, size_t len) {
 
+	});
+
+	server.on("/config/", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		log_d("Received settings for %s:\n%s", request->url(), json.to<String>());
+		String url = request->url();
+		url.remove(url.indexOf(".htm"));
+		url = url.substring(url.lastIndexOf("/"));
+		if (Section::sections.contains(url.c_str())) {
+			for (uint8_t i=0; i<Section::sections[url.c_str()].size; i++) {
+				Settings* setting = Section::sections[url.c_str()].array[i];
+				if (json.containsKey(setting->getKey())) {
+					String value = json[setting->getKey()];
+					if (!setting->setFromString(value)) {
+						log_w("Could not set setting %s in section %s to value %s!", setting->getKey(), url, value);
+					}
+					json.remove(setting->getKey());
+				}
+			}
+			for (uint8_t i=0; i<json.size(); i++) {
+				log_w("Setting %s does not exist in section %s!", json[i], url);
+			}
+		} else {
+			log_e("Could not find setting section %s from url %s", url, request->url());
+		}
+		request->send(200);
 	});
 
 	server.begin();

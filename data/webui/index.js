@@ -100,7 +100,7 @@ function beginWebSocket() {
 	ws.addEventListener("message", wsMessage);
 }
 
-addEventListener("DOMContentLoaded", (event) => {
+addEventListener("DOMContentLoaded", () => {
 	beginWebSocket();
 	if (colors.includes("R") && colors.includes("G") && colors.includes("B")) {
 		colorPicker = new iro.ColorPicker("#color-picker", {
