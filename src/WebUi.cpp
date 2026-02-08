@@ -75,20 +75,18 @@ void begin() {
 	});
 
 	server.on("/config/", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		log_d("Received settings for %s:\n%s", request->url(), json.to<String>());
+		log_d("Received settings for %s:\n%s", request->url(), json.as<String>());
 		String url = request->url();
 		url.remove(url.indexOf(".htm"));
 		url = url.substring(url.lastIndexOf("/"));
 		if (Section::sections.contains(url.c_str())) {
 			for (uint8_t i=0; i<Section::sections[url.c_str()].size; i++) {
 				Settings* setting = Section::sections[url.c_str()].array[i];
-				if (json.containsKey(setting->getKey())) {
-					String value = json[setting->getKey()];
-					if (!setting->setFromString(value)) {
-						log_w("Could not set setting %s in section %s to value %s!", setting->getKey(), url, value);
-					}
-					json.remove(setting->getKey());
+				const char* value = json[setting->getKey()].as<const char*>();
+				if (value==NULL || !setting->setFromString(String(value))) {
+					log_w("Could not set setting %s in section %s to value %s!", setting->getKey(), url, value);
 				}
+				json.remove(setting->getKey());
 			}
 			for (uint8_t i=0; i<json.size(); i++) {
 				log_w("Setting %s does not exist in section %s!", json[i], url);

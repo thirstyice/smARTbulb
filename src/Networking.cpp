@@ -86,7 +86,7 @@ void WiFiEvent(WiFiEvent_t event)
 void getSettings() {
 	Preferences* prefs = Settings::getPrefs(setSection.name);
 	for (auto const& setting : settings) {
-		setting->get(prefs);
+		setting->recall(prefs);
 	}
 	prefs->end();
 }
@@ -94,7 +94,7 @@ void getSettings() {
 void saveSettings() {
 	Preferences* prefs = Settings::getPrefs(setSection.name);
 	for (auto const& setting : settings) {
-		setting->put(prefs);
+		setting->save(prefs);
 	}
 	prefs->end();
 }
