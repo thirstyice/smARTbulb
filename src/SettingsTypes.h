@@ -23,7 +23,7 @@
 #include "Settings.h"
 
 template <typename T>
-class SettingsTypeBase : public Settings {
+class SettingTypeBase : public Setting {
 protected:
 	static const size_t size = sizeof(T);
 	union B {
@@ -31,8 +31,23 @@ protected:
 		byte bytes[size];
 	};
 	T var;
+	virtual bool parseString(String string) override {
+		if (std::is_integral_v<T>) {
+			var = string.toInt();
+			return true;
+		}
+		if (std::is_floating_point_v<T>) {
+			if (size == sizeof(double)) {
+				var = string.toDouble();
+			} else {
+				var = string.toFloat();
+			}
+			return true;
+		}
+		return false;
+	}
 public:
-	SettingsTypeBase(const char* _key, T _val) : Settings(_key), var(_val) {}
+	SettingTypeBase(const char* _key, T _val) : Setting(_key), var(_val) {}
 
 	virtual bool recall(Preferences* prefs) override {
 		if (!prefs->isKey(key)) {
@@ -57,42 +72,29 @@ public:
 		}
 		return false;
 	}
-
-	virtual bool setFromString(String string) override {
-		if (std::is_integral_v<T>) {
-			var = string.toInt();
-			return true;
-		}
-		if (std::is_floating_point_v<T>) {
-			if (size == sizeof(double)) {
-				var = string.toDouble();
-			} else {
-				var = string.toFloat();
-			}
-			return true;
-		}
-		return false;
-	}
 	virtual String getAsString() override {
 		return String(var);
 	};
 };
 
 template <typename T>
-class SettingsType : public SettingsTypeBase<T> { // Default interface
+class SettingType : public SettingTypeBase<T> { // Default interface
 public:
-	using SettingsTypeBase<T>::SettingsTypeBase;
-	T& val = SettingsTypeBase<T>::var; // Access the protected variable directly
+	using SettingTypeBase<T>::SettingTypeBase;
+	T& val = SettingTypeBase<T>::var; // Access the protected variable directly
 };
 
 template <>
-class SettingsType<IPAddress> : public SettingsTypeBase<uint32_t> {
+class SettingType<IPAddress> : public SettingTypeBase<uint32_t> {
 protected:
+	bool parseString(String string) override {
+		return val.fromString(string);
+	}
 public:
 	IPAddress val;
-	SettingsType(const char* _key, IPAddress _val) : SettingsTypeBase<uint32_t>(_key, uint32_t(_val)), val(_val) {}
+	SettingType(const char* _key, IPAddress _val) : SettingTypeBase<uint32_t>(_key, uint32_t(_val)), val(_val) {}
 	bool recall(Preferences* prefs) override {
-		if (SettingsTypeBase<uint32_t>::recall(prefs)) {
+		if (SettingTypeBase<uint32_t>::recall(prefs)) {
 			val = IPAddress(var);
 			return true;
 		}
@@ -101,11 +103,7 @@ public:
 
 	bool save(Preferences* prefs) override {
 		var = uint32_t(val);
-		return SettingsTypeBase<uint32_t>::save(prefs);
-	}
-
-	bool setFromString(String string) override {
-		return val.fromString(string);
+		return SettingTypeBase<uint32_t>::save(prefs);
 	}
 	String getAsString() override {
 		return val.toString();
@@ -113,11 +111,15 @@ public:
 };
 
 template<>
-class SettingsType<String> : public Settings {
+class SettingType<String> : public Setting {
 protected:
 	String var;
+	bool parseString(String string) override {
+		var = string;
+		return true;
+	}
 public:
-	SettingsType(const char* _key, String _val) : Settings(_key), var(_val) {}
+	SettingType(const char* _key, String _val) : Setting(_key), var(_val) {}
 	String& val = var;
 	bool recall(Preferences* prefs) override {
 		var = prefs->getString(key, var);
@@ -127,11 +129,6 @@ public:
 		if (prefs->putString(key, var) == 0) {
 			return false;
 		}
-		return true;
-	}
-
-	bool setFromString(String string) override {
-		var = string;
 		return true;
 	}
 	String getAsString() override {

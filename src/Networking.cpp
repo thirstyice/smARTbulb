@@ -84,17 +84,17 @@ void WiFiEvent(WiFiEvent_t event)
 }
 
 void getSettings() {
-	Preferences* prefs = Settings::getPrefs(setSection.name);
-	for (auto const& setting : settings) {
-		setting->recall(prefs);
+	Preferences* prefs = settings.getPrefs();
+	for (auto const& setting : settings.settings) {
+		setting.second->recall(prefs);
 	}
 	prefs->end();
 }
 
 void saveSettings() {
-	Preferences* prefs = Settings::getPrefs(setSection.name);
-	for (auto const& setting : settings) {
-		setting->save(prefs);
+	Preferences* prefs = settings.getPrefs();
+	for (auto const& setting : settings.settings) {
+		setting.second->save(prefs);
 	}
 	prefs->end();
 }

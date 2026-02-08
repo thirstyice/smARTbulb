@@ -41,12 +41,9 @@ void begin() {
 					String page = request->url();
 					page.remove(page.indexOf(".htm"));
 					page = page.substring(page.lastIndexOf("/"));
-					if (Section::sections.contains(page.c_str())) {
-						for (uint8_t i=0; i<Section::sections[page.c_str()].size; i++) {
-							Settings* setting = Section::sections[page.c_str()].array[i];
-							if (var == setting->getKey()) {
-								return setting->getAsString();
-							}
+					if (Settings::sections.contains(page.c_str())) {
+						if (Settings::sections[page.c_str()].contains(var.c_str())) {
+							return Settings::sections[page.c_str()][var.c_str()]->getAsString();
 						}
 					}
 				}
@@ -79,14 +76,13 @@ void begin() {
 		String url = request->url();
 		url.remove(url.indexOf(".htm"));
 		url = url.substring(url.lastIndexOf("/"));
-		if (Section::sections.contains(url.c_str())) {
-			for (uint8_t i=0; i<Section::sections[url.c_str()].size; i++) {
-				Settings* setting = Section::sections[url.c_str()].array[i];
-				const char* value = json[setting->getKey()].as<const char*>();
-				if (value==NULL || !setting->setFromString(String(value))) {
-					log_w("Could not set setting %s in section %s to value %s!", setting->getKey(), url, value);
+		if (Settings::sections.contains(url.c_str())) {
+			for (auto const setting : Settings::sections[url.c_str()]) {
+				const char* value = json[setting.first].as<const char*>();
+				if (value==NULL || !setting.second->setFromString(String(value))) {
+					log_w("Could not set setting %s in section %s to value %s!", setting.first, url, value);
 				}
-				json.remove(setting->getKey());
+				json.remove(setting.first);
 			}
 			for (uint8_t i=0; i<json.size(); i++) {
 				log_w("Setting %s does not exist in section %s!", json[i], url);
