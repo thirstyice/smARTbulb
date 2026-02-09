@@ -35,6 +35,9 @@ void begin() {
 					return SMARTBULB_VERSION_STR;
 				}
 				if (var == "IP") {
+					if (WiFi.getMode() == WIFI_MODE_AP) {
+						return WiFi.softAPIP().toString();
+					}
 					return WiFi.localIP().toString();
 				}
 				if (request->url().startsWith("/config/")) {
