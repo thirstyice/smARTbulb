@@ -55,25 +55,26 @@ public:
 };
 
 typedef std::function<void()> SettingsCallback;
+typedef std::map<const char* const, Setting*> SettingSection;
 
 struct Settings {
-	static std::map<const char* const, std::map<const char* const, Setting*>> sections;
+	static std::map<const char* const, SettingSection> sections;
 	const char* const name;
-	std::map<const char* const, Setting*> &settings;
+	SettingSection* settings;
 	SettingsCallback callback;
 	static Preferences* getPrefs(const char* section);
 	Preferences* getPrefs() {return getPrefs(name);}
 	Settings(
 		const char* const _name,
-		std::map<const char* const, Setting*> _settings,
+		SettingSection _settings,
 		SettingsCallback _callback = nullptr
-	) : name(_name), callback(_callback), settings(_settings) {
+	) : name(_name), callback(_callback) {
 		sections[name] = _settings;
-		settings = sections[name];
+		settings = &sections[name];
 		if (callback == nullptr) {
 			callback = [&]() {
 				Preferences* prefs = getPrefs();
-				for (auto const& setting : settings) {
+				for (auto const& setting : *settings) {
 					if (setting.second->wasUpdated()) {
 						setting.second->save(prefs);
 					}

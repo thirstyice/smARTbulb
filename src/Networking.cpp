@@ -85,7 +85,9 @@ void WiFiEvent(WiFiEvent_t event)
 
 void getSettings() {
 	Preferences* prefs = settings.getPrefs();
-	for (auto const& setting : settings.settings) {
+	Serial.println("Ready");
+	for (auto const& setting : *settings.settings) {
+		Serial.println(setting.first);
 		setting.second->recall(prefs);
 	}
 	prefs->end();
@@ -93,7 +95,7 @@ void getSettings() {
 
 void saveSettings() {
 	Preferences* prefs = settings.getPrefs();
-	for (auto const& setting : settings.settings) {
+	for (auto const& setting : *settings.settings) {
 		setting.second->save(prefs);
 	}
 	prefs->end();
@@ -121,6 +123,7 @@ void networkingTask(void*) {
 		hostname.val += String(mac[i], 16);
 	}
 	getSettings();
+	Log->println("Begin WiFi");
 	WiFi.onEvent(WiFiEvent);
 	WiFi.setHostname(hostname.val.c_str());
 	WiFi.enableSTA(true);
