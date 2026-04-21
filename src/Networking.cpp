@@ -87,7 +87,6 @@ void getSettings() {
 	Preferences* prefs = settings.getPrefs();
 	Serial.println("Ready");
 	for (auto const& setting : *settings.settings) {
-		Serial.println(setting.first);
 		setting.second->recall(prefs);
 	}
 	prefs->end();

@@ -36,7 +36,7 @@
 ** See Settings class for more details.
 **/
 #define MakeSettings(sectionName, ...) FOR_EACH(_DEFINE_SETTING, __VA_ARGS__) \
-	Settings settings{sectionName, std::map<const char* const, Setting*>{ SETTING_MAP(__VA_ARGS__) }}
+	Settings settings{sectionName, std::map<const std::string, Setting*>{ SETTING_MAP(__VA_ARGS__) }}
 
 
 
@@ -56,7 +56,7 @@ public:
 };
 
 typedef std::function<void()> SettingsCallback;
-typedef std::map<const char* const, Setting*> SettingSection;
+typedef std::map<const std::string, Setting*> SettingSection;
 
 struct Settings {
 	static std::map<const std::string, SettingSection> sections;
