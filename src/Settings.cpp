@@ -11,7 +11,7 @@
 *******************************************************************************/
 #include "Settings.h"
 
-std::map<const char* const, std::map<const char* const, Setting*>> Settings::sections = {};
+std::map<const std::string, std::map<const char * const, Setting*>> Settings::sections = {};
 Preferences prefsObj = Preferences{};
 
 Preferences* Settings::getPrefs(const char* section) {

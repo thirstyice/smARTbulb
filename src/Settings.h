@@ -14,6 +14,7 @@
 #include <Arduino.h>
 #include <Preferences.h>
 #include <ArxContainer.h>
+#include <string>
 #include "macros.h"
 
 #define DEFINE_SETTING(type, name, value) SettingType<type> name = SettingType<type>{__STRINGIFY(name), type(value)}
@@ -58,7 +59,7 @@ typedef std::function<void()> SettingsCallback;
 typedef std::map<const char* const, Setting*> SettingSection;
 
 struct Settings {
-	static std::map<const char* const, SettingSection> sections;
+	static std::map<const std::string, SettingSection> sections;
 	const char* const name;
 	SettingSection* settings;
 	SettingsCallback callback;
