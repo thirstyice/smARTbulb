@@ -43,7 +43,7 @@ void begin() {
 				if (request->url().startsWith("/config/")) {
 					String page = request->url();
 					page.remove(page.indexOf(".htm"));
-					page = page.substring(page.lastIndexOf("/"));
+					page = page.substring(page.lastIndexOf("/") + 1);
 					if (Settings::sections.contains(page.c_str())) {
 						if (Settings::sections[page.c_str()].contains(var.c_str())) {
 							return Settings::sections[page.c_str()][var.c_str()]->getAsString();
