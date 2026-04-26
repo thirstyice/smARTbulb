@@ -18,6 +18,7 @@
 
 #include "Settings.h"
 #include "Networking.h"
+#include "light/Light.h"
 
 namespace WebUi {
 AsyncWebServer server(80);
@@ -28,6 +29,8 @@ void begin() {
 	server.on("", HTTP_GET, [](AsyncWebServerRequest *request) {
 		if (request->url().endsWith(".html") || request->url().endsWith(".htm")) {
 			request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
+
+
 				if (var == "HOSTNAME") {
 					return WiFi.getHostname();
 				}
@@ -40,16 +43,50 @@ void begin() {
 					}
 					return WiFi.localIP().toString();
 				}
+
+
 				if (request->url().startsWith("/config/")) {
 					String page = request->url();
 					page.remove(page.indexOf(".htm"));
 					page = page.substring(page.lastIndexOf("/") + 1);
-					if (Settings::sections.contains(page.c_str())) {
+
+					if (page == "light") {
+						if (var == "redChan") {
+							return String(light::getOutputMap(light::Red));
+						}
+						if (var == "greenChan") {
+							return String(light::getOutputMap(light::Green));
+						}
+						if (var == "blueChan") {
+							return String(light::getOutputMap(light::Blue));
+						}
+						if (var == "coolChan") {
+							return String(light::getOutputMap(light::Cool));
+						}
+						if (var == "warmChan") {
+							return String(light::getOutputMap(light::Warm));
+						}
+						if (var == "MODULES") {
+							String out;
+							for (uint8_t i=0; i<light::numModules; i++) {
+								out += "<option value=";
+								out += String(i);
+								out += ">";
+								out += light::modules[i]->name;
+								out += "</option>\n";
+							}
+							return out;
+						}
+					} else if (page == "module") {
+						// TODO
+					} else if (Settings::sections.contains(page.c_str())) {
 						if (Settings::sections[page.c_str()].contains(var.c_str())) {
 							return Settings::sections[page.c_str()][var.c_str()]->getAsString();
 						}
 					}
 				}
+
+
 				return emptyString;
 			});
 		} else {

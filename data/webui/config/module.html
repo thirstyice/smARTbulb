@@ -21,35 +21,30 @@
 	<body>
 		<div id="header">
 			<h3>%HOSTNAME%</h3>
-			<h2>Light Config</h2>
+			<h2>Module Config</h2>
 		</div>
 		<div id="settings">
-			<label for="module">Module</label>
-			<select id="module">
-				%MODULES%
-			</select>
-			<h2>Channel Mapping:</h2>
-			<table id="chanmap">
+			<table id="gpio">
 				<tbody>
 					<tr>
-						<td><label for="redChan">Red:</label></td>
-						<td><input id="redChan" type="number" min="-1" max="5" value="%redChan%"></td>
+						<td><label for="gpio1">%GPIO1TYPE%:</label></td>
+						<td><input id="gpio1" type="number" min="-1" max="40" value="%gpio1%"></td>
 					</tr>
 					<tr>
-						<td><label for="greenChan">Green:</label></td>
-						<td><input id="greeChan" type="number" min="-1" max="5" value="%greenChan%"></td>
+						<td><label for="gpio2">%GPIO2TYPE%:</label></td>
+						<td><input id="gpio2" type="number" min="-1" max="40" value="%gpio2%"></td>
 					</tr>
 					<tr>
-						<td><label for="blueChan">Blue:</label></td>
-						<td><input id="blueChan" type="number" min="-1" max="5" value="%blueChan%"></td>
+						<td><label for="gpio3">%GPIO3TYPE%:</label></td>
+						<td><input id="gpio3" type="number" min="-1" max="40" value="%gpio3%"></td>
 					</tr>
 					<tr>
-						<td><label for="coolChan">White (cool):</label></td>
-						<td><input id="coolChan" type="number" min="-1" max="5" value="%coolChan%"></td>
+						<td><label for="gpio4">%GPIO4TYPE%:</label></td>
+						<td><input id="gpio4" type="number" min="-1" max="40" value="%gpio4%"></td>
 					</tr>
 					<tr>
-						<td><label for="warmChan">White (warm):</label></td>
-						<td><input id="warmChan" type="number" min="-1" max="5" value="%warmChan%"></td>
+						<td><label for="gpio5">%GPIO5TYPE%:</label></td>
+						<td><input id="gpio5" type="number" min="-1" max="40" value="%gpio5%"></td>
 					</tr>
 				</tbody>
 			</table>
