@@ -9,19 +9,40 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-#pragma once
 #include "Light.h"
+
 #include <driver/ledc.h>
 
 namespace light {
 
-struct PWM : Interface {
-	Setting* getSettingsArray() override;
-	uint8_t getSettingsLength() override;
-	void begin() override;
-	void end() override;
-	void setColor(Color, uint16_t) override;
-	const char * const name = "PWM";
-};
+namespace pwm {
+	Setting settingsArray[] = {
+		Setting{"GPIO 1", -1, 33},
+		Setting{"GPIO 2", -1, 33},
+		Setting{"GPIO 3", -1, 33},
+		Setting{"GPIO 4", -1, 33},
+		Setting{"GPIO 5", -1, 33}
+	};
+	const uint8_t settingsArrayLength = sizeof(settingsArray) / sizeof(settingsArray[0]);
+
+	Setting* settings()  {
+		return settingsArray;
+	}
+
+	uint8_t settingsLen()  {
+		return settingsArrayLength;
+	};
+	void begin()  {
+
+	};
+	void end() {
+
+	};
+	void out(uint8_t, uint16_t) {
+
+	};
+} // namespace pwm
+
+Light PWM{"PWM", pwm::settings, pwm::settingsLen, pwm::begin, pwm::end, pwm::out};
 
 } // namespace light

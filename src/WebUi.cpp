@@ -51,28 +51,32 @@ void begin() {
 					page = page.substring(page.lastIndexOf("/") + 1);
 
 					if (page == "light") {
+						light::Color color = light::Color::End;
 						if (var == "redChan") {
-							return String(light::getOutputMap(light::Red));
+							color = light::Red;
 						}
 						if (var == "greenChan") {
-							return String(light::getOutputMap(light::Green));
+							color = light::Green;
 						}
 						if (var == "blueChan") {
-							return String(light::getOutputMap(light::Blue));
+							color = light::Blue;
 						}
 						if (var == "coolChan") {
-							return String(light::getOutputMap(light::Cool));
+							color = light::Cool;
 						}
 						if (var == "warmChan") {
-							return String(light::getOutputMap(light::Warm));
+							color = light::Warm;
+						}
+						if (color != light::Color::End) {
+							return String(light::Light::getOutputMap(color));
 						}
 						if (var == "MODULES") {
 							String out;
-							for (uint8_t i=0; i<light::numModules; i++) {
+							for (uint8_t i=0; i<light::Light::numModules; i++) {
 								out += "<option value=";
 								out += String(i);
 								out += ">";
-								out += light::modules[i]->name;
+								out += light::Light::modules[i]->name;
 								out += "</option>\n";
 							}
 							return out;
