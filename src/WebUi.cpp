@@ -73,16 +73,35 @@ void begin() {
 						if (var == "MODULES") {
 							String out;
 							for (uint8_t i=0; i<light::Light::numModules; i++) {
-								out += "<option value=";
+								out += "<option value='";
 								out += String(i);
-								out += ">";
+								out += "'>";
 								out += light::Light::modules[i]->name;
 								out += "</option>\n";
 							}
 							return out;
 						}
 					} else if (page == "module") {
-						// TODO
+						if (var == "SETTINGS") {
+							String out;
+							light::Light* module = light::Light::modules[light::Light::currentModuleIndex];
+							light::Setting* settings = module->getSettingsArray();
+							for (uint8_t i=0; i<module->getSettingsLength(); i++) {
+								out += "<tr>\n<td><label for='setting";
+								out += String(i);
+								out += "'>";
+								out += settings[i].label;
+								out += "</label></td>\n<td><input id='setting";
+								out += String(i);
+								out += "' type='number' min='";
+								out += String(settings[i].min);
+								out += "' max='";
+								out += String(settings[i].max);
+								out += "' value='";
+								out += String(settings[i].value);
+								out += "'></td>\n</tr>\n";
+							}
+						}
 					} else if (Settings::sections.contains(page.c_str())) {
 						if (Settings::sections[page.c_str()].contains(var.c_str())) {
 							return Settings::sections[page.c_str()][var.c_str()]->getAsString();
