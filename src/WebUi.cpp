@@ -134,11 +134,11 @@ void begin() {
 
 	});
 
-	server.on("/config/", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+	server.on("/config", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
 		log_d("Received settings for %s:\n%s", request->url(), json.as<String>());
 		String url = request->url();
 		url.remove(url.indexOf(".htm"));
-		url = url.substring(url.lastIndexOf("/"));
+		url = url.substring(url.lastIndexOf("/")+1);
 		if (Settings::sections.contains(url.c_str())) {
 			for (auto const setting : Settings::sections[url.c_str()]) {
 				const char* value = json[setting.first].as<const char*>();

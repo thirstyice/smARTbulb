@@ -25,6 +25,9 @@ function saveSettings() {
 		body: JSON.stringify(settings),
 		keepalive: true,
 		method: "PUT",
+		headers: {
+      "Content-Type": "application/json",
+    },
 	});
 }
 
