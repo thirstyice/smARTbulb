@@ -14,17 +14,7 @@
 namespace light {
 
 namespace none {
-	Setting settingsArray[] = {
-	};
-	const uint8_t settingsArrayLength = sizeof(settingsArray) / sizeof(settingsArray[0]);
 
-	Setting* settings()  {
-		return settingsArray;
-	}
-
-	uint8_t settingsLen()  {
-		return settingsArrayLength;
-	};
 	void begin()  {
 
 	};
@@ -37,6 +27,6 @@ namespace none {
 
 } // namespace none
 
-Light None{"No Module Selected", none::settings, none::settingsLen, none::begin, none::end, none::out};
+Light None{"No Module Selected", 0, nullptr, none::begin, none::end, none::out};
 
 } // namespace light

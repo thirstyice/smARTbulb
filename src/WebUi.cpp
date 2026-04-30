@@ -94,25 +94,27 @@ void begin() {
 
 	server.on("/config/module.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-			if (var == "SETTINGS") {
-				String out;
+			if (var == "GPIO") {
+				String out = String("\0\0", 150);
 				light::Light* module = light::Light::modules[light::Light::currentModuleIndex];
-				light::Setting* settings = module->getSettingsArray();
-				for (uint8_t i=0; i<module->getSettingsLength(); i++) {
-					out += "<tr>\n<td><label for='setting";
-					out += String(i);
+				for (uint8_t i=0; i<module->numGPIO; i++) {
+					char name[8];
+					snprintf(name, 8, "gpio%d", i);
+					out += "<tr>\n<td><label for='";
+					out += name;
 					out += "'>";
-					out += settings[i].label;
-					out += "</label></td>\n<td><input id='setting";
-					out += String(i);
-					out += "' type='number' min='";
-					out += String(settings[i].min);
-					out += "' max='";
-					out += String(settings[i].max);
-					out += "' value='";
-					out += String(settings[i].value);
+					out += module->gpioNames[i];
+					out += "</label></td>\n<td><input id='";
+					out += name;
+					out += "' type='number' min='-1' max='40' value='";
+					if (Settings::sections["light"].contains(name)) {
+						out += Settings::sections["light"][name]->getAsString();
+					} else {
+						out += "-1";
+					}
 					out += "'></td>\n</tr>\n";
 				}
+				return out;
 			}
 			return getGenericVar(var);
 		});
@@ -130,34 +132,13 @@ void begin() {
 	server.on("", HTTP_GET, [](AsyncWebServerRequest *request) {
 		if (request->url().endsWith(".html") || request->url().endsWith(".htm")) {
 			request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-
-
-
-
-
-				if (request->url().startsWith("/config/")) {
-					String page = request->url();
-					page.remove(page.indexOf(".htm"));
-					page = page.substring(page.lastIndexOf("/") + 1);
-
-					if (page == "light") {
-
-					} else if (page == "module") {
-
-					} else if (Settings::sections.contains(page.c_str())) {
-						if (Settings::sections[page.c_str()].contains(var.c_str())) {
-							return Settings::sections[page.c_str()][var.c_str()]->getAsString();
-						}
-					}
-				}
-
-
 				return getGenericVar(var);
 			});
 		} else {
 			request->send(LittleFS, "/webui" + request->url());
 		}
 	});
+
 	server.rewrite("/", "/index.html");
 
 	wsHandler.onConnect([](AsyncWebSocket *server, AsyncWebSocketClient *client) {
@@ -186,6 +167,8 @@ void begin() {
 				const char* value = json[setting.first].as<const char*>();
 				if (value==NULL || !setting.second->setFromString(String(value))) {
 					log_w("Could not set setting %s in section %s to value %s!", setting.first, url, value);
+				} else {
+					setting.second->save(Settings::getPrefs(url.c_str()));
 				}
 				json.remove(setting.first);
 			}

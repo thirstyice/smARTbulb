@@ -12,7 +12,22 @@
 
 #include "Light.h"
 
+#include "Settings.h"
+
+
+
 namespace light {
+
+MakeSettings("light",
+	(uint8_t, moduleIndex, 0),
+	(int8_t, redChan, -1),
+	(int8_t, greenChan, -1),
+	(int8_t, blueChan, -1),
+	(int8_t, coolChan, -1),
+	(int8_t, warmChan, -1)
+);
+
+
 /**
 ** @brief Module array
 **
@@ -28,11 +43,29 @@ Light* const Light::modules[] = {
 **
 **/
 
-uint8_t Light::currentModuleIndex = 0;
 const uint8_t Light::numModules = sizeof(modules) / sizeof(modules[0]);
 
 uint8_t colors[Color::End];
-int8_t outputMap[ Color::End - 1 ] = { -1, -1, -1, -1, -1 };
+
+uint8_t getOutFromColor(Color color) {
+	switch (color) {
+		case Red:
+			return redChan.val;
+		break;
+		case Green:
+			return greenChan.val;
+		break;
+		case Blue:
+			return blueChan.val;
+		break;
+		case Cool:
+			return coolChan.val;
+		break;
+		case Warm:
+			return warmChan.val;
+		break;
+	}
+}
 
 
 void Light::setColor(Color color, uint8_t value) {
@@ -48,27 +81,20 @@ void Light::setColor(Color color, uint8_t value) {
 	}
 	uint16_t out = colors[Intensity];
 	out *= colors[color];
-	modules[currentModuleIndex]->setOutput(outputMap[color], out);
+	modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
 }
 
 uint8_t Light::getColor(Color color) {
 	return colors[color];
 }
 
-void Light::setOutputMap(Color color, int8_t output) {
-	outputMap[color] = output;
-}
-
-int8_t Light::getOutputMap(Color color) {
-	return outputMap[color];
-}
 
 bool Light::hasRGB() {
-	return (outputMap[Red]>=0) && (outputMap[Green]>=0) && (outputMap[Blue]>=0);
+	return (redChan.val>=0) && (greenChan.val>=0) && (blueChan.val>=0);
 }
 
 bool Light::hasCT() {
-	return (outputMap[Cool]>=0) && (outputMap[Warm]>=0);
+	return (coolChan.val>=0) && (warmChan.val>=0);
 }
 
 } // namespace light

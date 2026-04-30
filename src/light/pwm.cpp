@@ -16,22 +16,15 @@
 namespace light {
 
 namespace pwm {
-	Setting settingsArray[] = {
-		Setting{"GPIO 1", -1, 33},
-		Setting{"GPIO 2", -1, 33},
-		Setting{"GPIO 3", -1, 33},
-		Setting{"GPIO 4", -1, 33},
-		Setting{"GPIO 5", -1, 33}
+	const char * const gpioNames[] = {
+		"Output 1",
+		"Output 2",
+		"Output 3",
+		"Output 4",
+		"Output 5"
 	};
-	const uint8_t settingsArrayLength = sizeof(settingsArray) / sizeof(settingsArray[0]);
+	const uint8_t numGPIO = sizeof(gpioNames) / sizeof(gpioNames[0]);
 
-	Setting* settings()  {
-		return settingsArray;
-	}
-
-	uint8_t settingsLen()  {
-		return settingsArrayLength;
-	};
 	void begin()  {
 
 	};
@@ -43,6 +36,6 @@ namespace pwm {
 	};
 } // namespace pwm
 
-Light PWM{"PWM", pwm::settings, pwm::settingsLen, pwm::begin, pwm::end, pwm::out};
+Light PWM{"PWM", pwm::numGPIO, pwm::gpioNames, pwm::begin, pwm::end, pwm::out};
 
 } // namespace light
