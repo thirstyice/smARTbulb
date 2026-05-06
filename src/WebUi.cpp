@@ -56,25 +56,6 @@ void begin() {
 
 	server.on("/config/light.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-			light::Color color = light::Color::End;
-				if (var == "redChan") {
-					color = light::Red;
-				}
-				if (var == "greenChan") {
-					color = light::Green;
-				}
-				if (var == "blueChan") {
-					color = light::Blue;
-				}
-				if (var == "coolChan") {
-					color = light::Cool;
-				}
-				if (var == "warmChan") {
-					color = light::Warm;
-				}
-				if (color != light::Color::End) {
-					return String(light::Light::getOutputMap(color));
-				}
 				if (var == "MODULES") {
 					String out;
 					for (uint8_t i = 0; i < light::Light::numModules;
@@ -84,6 +65,9 @@ void begin() {
 						out += "'>";
 						out += light::Light::modules[i]->name;
 						out += "</option>\n";
+					}
+					if (Settings::sections["light"].contains(var.c_str())) {
+						return Settings::sections["light"][var.c_str()]->getAsString();
 					}
 					return out;
 				}
@@ -96,7 +80,7 @@ void begin() {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "GPIO") {
 				String out = String("\0\0", 150);
-				light::Light* module = light::Light::modules[light::Light::currentModuleIndex];
+				light::Light* module = light::Light::modules[Settings::sections["light"]["moduleIndex"]->getAsString().toInt()];
 				for (uint8_t i=0; i<module->numGPIO; i++) {
 					char name[8];
 					snprintf(name, 8, "gpio%d", i);
