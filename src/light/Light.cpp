@@ -47,7 +47,7 @@ const uint8_t Light::numModules = sizeof(modules) / sizeof(modules[0]);
 
 uint8_t colors[Color::End];
 
-uint8_t getOutFromColor(Color color) {
+int8_t getOutFromColor(Color color) {
 	switch (color) {
 		case Red:
 			return redChan.val;
@@ -63,6 +63,9 @@ uint8_t getOutFromColor(Color color) {
 		break;
 		case Warm:
 			return warmChan.val;
+		break;
+		default:
+			return -1;
 		break;
 	}
 }
