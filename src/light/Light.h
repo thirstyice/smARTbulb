@@ -33,7 +33,10 @@ private:
 	std::function<void()> beginFunc;
 	std::function<void()> endFunc;
 	std::function<void(uint8_t, uint8_t)> outFunc;
-	void setOutput(uint8_t output, uint16_t value) {
+	void setOutput(int8_t output, uint16_t value) {
+		if (output<0) {
+			return;
+		}
 		outFunc(output, value);
 	};
 public:
