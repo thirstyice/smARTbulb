@@ -6,6 +6,7 @@ TaskHandle_t NetworkTaskHandle;
 
 void setup() {
 	Serial.begin(115200);
+	log_d("Begin smARTbulb");
 	LittleFS.begin();
 	// Set up Light
 	xTaskCreate(

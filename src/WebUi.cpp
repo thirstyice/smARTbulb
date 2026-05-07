@@ -42,7 +42,7 @@ String getGenericVar(String var) {
 }
 
 void begin() {
-
+	log_i("Begin WebUI");
 
 	server.on("/config/network.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
@@ -142,7 +142,7 @@ void begin() {
 	});
 
 	server.on("/config", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		log_d("Received settings for %s:\n%s", request->url(), json.as<String>());
+		log_i("Received settings for %s:\n%s", request->url(), json.as<String>());
 		String url = request->url();
 		url.remove(url.indexOf(".htm"));
 		url = url.substring(url.lastIndexOf("/")+1);

@@ -44,40 +44,40 @@ void WiFiEvent(WiFiEvent_t event)
 {
 	switch (event) {
 		case ARDUINO_EVENT_WIFI_READY:
-				Log->println("WiFi ready");
+				log_d("WiFi ready");
 				break;
 		case ARDUINO_EVENT_WIFI_SCAN_DONE:
-				Log->println("WiFi scan done");
+				log_d("WiFi scan done");
 				break;
 		case ARDUINO_EVENT_WIFI_STA_START:
-				Log->println("WiFi started");
+				log_d("WiFi started");
 				break;
 		case ARDUINO_EVENT_WIFI_STA_STOP:
-				Log->println("WiFi stopped");
+				log_d("WiFi stopped");
 				break;
 		case ARDUINO_EVENT_WIFI_STA_CONNECTED:
-				Log->println("WiFi connected");
+				log_d("WiFi connected");
 				if (ip.val != IPAddress(0UL)) {
 					connected = true;
 				}
 				break;
 		case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
-				Log->println("WiFi disconnect");
+				log_d("WiFi disconnect");
 				connected = false;
 				break;
 		case ARDUINO_EVENT_WIFI_STA_AUTHMODE_CHANGE:
-				Log->println("WiFi authmode");
+				log_d("WiFi authmode");
 				break;
 		case ARDUINO_EVENT_WIFI_STA_GOT_IP:
-				Log->println("WiFi got IP");
+				log_d("WiFi got IP");
 				connected = true;
 				break;
 		case ARDUINO_EVENT_WIFI_STA_LOST_IP:
-				Log->println("WiFi lost IP");
+				log_d("WiFi lost IP");
 				connected = false;
 				break;
 		case ARDUINO_EVENT_WIFI_AP_START:
-				Log->println("WiFi AP mode");
+				log_d("WiFi AP mode");
 		default:
 			break;
 	}
@@ -85,7 +85,7 @@ void WiFiEvent(WiFiEvent_t event)
 
 void getSettings() {
 	Preferences* prefs = settings.getPrefs();
-	Serial.println("Ready");
+	log_i("Networking: getSettings");
 	for (auto const& setting : *settings.settings) {
 		setting.second->recall(prefs);
 	}
@@ -101,12 +101,12 @@ void saveSettings() {
 }
 
 void useAPMode() {
-	Log->println("Starting AP mode");
+	log_i("Starting AP mode");
 	WiFi.disconnect();
 	WiFi.enableSTA(false);
 	WiFi.enableAP(true);
 	while (!WiFi.softAP(apSSID.val, apPass.val)) {
-		Log->println("AP mode failure! Will try again");
+		log_w("AP mode failure! Will try again");
 		vTaskDelay(1000);
 	}
 	dnsServer.start(53, "*", WiFi.softAPIP());
@@ -114,15 +114,15 @@ void useAPMode() {
 
 void networkingTask(void*) {
 	unsigned long beginTime;
-	Log->println("Begin Network");
 	uint8_t mac[6];
+	log_i("Begin Networking");
 	WiFi.macAddress(mac);
 	hostname.val += "-";
 	for (uint8_t i = 3; i<6; i++) {
 		hostname.val += String(mac[i], 16);
 	}
 	getSettings();
-	Log->println("Begin WiFi");
+	log_i("Begin WiFi");
 	WiFi.onEvent(WiFiEvent);
 	WiFi.setHostname(hostname.val.c_str());
 	WiFi.enableSTA(true);
