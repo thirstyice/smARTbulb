@@ -18,7 +18,7 @@
 
 namespace light {
 
-MakeSettings("light",
+MakeSettings(
 	(uint8_t, moduleIndex, 0),
 	(int8_t, redChan, -1),
 	(int8_t, greenChan, -1),

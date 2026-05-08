@@ -18,6 +18,7 @@
 namespace Networking {
 
 extern bool connected;
+extern volatile bool settingsDidUpdate;
 
 void networkingTask(void*);
 }

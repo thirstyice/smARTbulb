@@ -18,8 +18,9 @@
 
 
 namespace Networking {
+	volatile bool settingsDidUpdate = false;
 
-MakeSettings("network",
+MakeSettings(
 	(IPAddress, ip, INITIAL_IP),
 	(IPAddress, gateway, INITIAL_GATEWAY),
 	(IPAddress, subnet, INITIAL_SUBNET),
@@ -82,23 +83,6 @@ void WiFiEvent(WiFiEvent_t event)
 	}
 }
 
-void getSettings() {
-	Preferences* prefs = settings.getPrefs();
-	log_i("Networking: getSettings");
-	for (auto const& setting : *settings.settings) {
-		setting.second->recall(prefs);
-	}
-	prefs->end();
-}
-
-void saveSettings() {
-	Preferences* prefs = settings.getPrefs();
-	for (auto const& setting : *settings.settings) {
-		setting.second->save(prefs);
-	}
-	prefs->end();
-}
-
 void useAPMode() {
 	log_i("Starting AP mode");
 	WiFi.disconnect();
@@ -115,12 +99,13 @@ void networkingTask(void*) {
 	unsigned long beginTime;
 	uint8_t mac[6];
 	log_i("Begin Networking");
+	BeginSettings("networking");
 	WiFi.macAddress(mac);
 	hostname.val += "-";
 	for (uint8_t i = 3; i<6; i++) {
 		hostname.val += String(mac[i], 16);
 	}
-	getSettings();
+	RecallSettings();
 	log_i("Begin WiFi");
 	WiFi.onEvent(WiFiEvent);
 	WiFi.setHostname(hostname.val.c_str());
