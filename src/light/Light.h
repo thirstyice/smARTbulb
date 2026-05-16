@@ -11,6 +11,7 @@
 *******************************************************************************/
 #pragma once
 #include <Arduino.h>
+#include "Settings.h"
 
 namespace light {
 
@@ -76,5 +77,7 @@ public:
 
 extern Light None;
 extern Light PWM;
+
+extern Settings settings;
 
 } // namespace light

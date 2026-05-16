@@ -50,14 +50,14 @@ public:
 	explicit SettingTypeBase(Preferences& _prefs, String _key, T _val) : Setting(_prefs, _key), var(_val) {}
 
 	virtual bool recall() override {
-		if (!prefs->isKey(key.c_str())) {
+		if (!prefs.isKey(key.c_str())) {
 			return true;
 		}
-		if (prefs->getBytesLength(key.c_str()) < size) {
+		if (prefs.getBytesLength(key.c_str()) < size) {
 			return false;
 		}
 		B buffer;
-		if (prefs->getBytes(key.c_str(), buffer.bytes, size) == size) {
+		if (prefs.getBytes(key.c_str(), buffer.bytes, size) == size) {
 			var = buffer.var;
 			return true;
 		}
@@ -67,7 +67,7 @@ public:
 	virtual bool save() override {
 		B buffer;
 		buffer.var = var;
-		if (prefs->putBytes(key.c_str(), buffer.bytes, size) == size) {
+		if (prefs.putBytes(key.c_str(), buffer.bytes, size) == size) {
 			return true;
 		}
 		return false;

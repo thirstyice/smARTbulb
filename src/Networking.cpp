@@ -10,7 +10,6 @@
 *                                                                              *
 *******************************************************************************/
 #include "Networking.h"
-#include "Settings.h"
 #include "WebUi.h"
 
 #include <WiFiMulti.h>

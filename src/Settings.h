@@ -16,11 +16,9 @@
 #include <ArxContainer.h>
 #include "macros.h"
 
-#define DEFINE_SETTING(type, name, value, callback) SettingType<type> name = SettingType<type>{prefs, __STRINGIFY(name), type(value), callback}
-#define DEFINE_SETTING(type, name, value) SettingType<type> name = SettingType<type>{prefs, __STRINGIFY(name), type(value)}
+#define DEFINE_SETTING(type, name, value, ...) SettingType<type> name = SettingType<type>{prefs, __STRINGIFY(name), type(value) __VA_OPT__(,) __VA_ARGS__}
 #define _DEFINE_SETTING(x) DEFINE_SETTING x;
-#define SETTING_NAME(type, name, value, callback) name
-#define SETTING_NAME(type, name, value) name
+#define SETTING_NAME(type, name, ...) name
 #define __SETTING_MAP(name) { __STRINGIFY(name), & name }
 #define _SETTING_MAP(setting) , __SETTING_MAP(SETTING_NAME setting)
 #define SETTING_MAP(first, ...)  __SETTING_MAP(SETTING_NAME first) FOR_EACH(_SETTING_MAP, __VA_ARGS__)
@@ -36,7 +34,7 @@
 **/
 #define MakeSettings(...) Preferences prefs{};\
 FOR_EACH(_DEFINE_SETTING, __VA_ARGS__) \
-std::map<String, Setting*> settings{ SETTING_MAP(__VA_ARGS__) }
+Settings settings{ SETTING_MAP(__VA_ARGS__) }
 
 #define BeginSettings(sectionName) prefs.begin(sectionName);
 #define SaveSettings() for (auto const& setting : settings) {setting.second->save();}
@@ -63,7 +61,7 @@ public:
 	bool setFromString(String string);
 	virtual String getAsString() =0;
 };
-
+ typedef std::map<String, Setting*> Settings;
 
 #include "SettingsTypes.h"
 

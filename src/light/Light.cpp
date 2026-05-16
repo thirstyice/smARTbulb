@@ -12,8 +12,6 @@
 
 #include "Light.h"
 
-#include "Settings.h"
-
 
 
 namespace light {
