@@ -28,25 +28,18 @@ enum Color : uint8_t {
 ** @brief Defines the common interface for Light types
 **
 **/
-struct Light {
+class Light {
 private:
 	std::function<void()> beginFunc;
 	std::function<void()> endFunc;
 	std::function<void(uint8_t, uint8_t)> outFunc;
+public:
 	void setOutput(int8_t output, uint16_t value) {
 		if (output<0) {
 			return;
 		}
 		outFunc(output, value);
 	};
-public:
-	static void setColor(Color, uint8_t);
-	static uint8_t getColor(Color);
-	static bool hasRGB();
-	static bool hasCT();
-	static const uint8_t numModules;
-	static Light* const modules[];
-
 	void begin() {
 		beginFunc();
 	}
@@ -73,6 +66,12 @@ public:
 	{}
 }; // class Light
 
+void setColor(Color, uint8_t);
+uint8_t getColor(Color);
+bool hasRGB();
+bool hasCT();
+extern const uint8_t numModules;
+extern Light* const modules[];
 
 extern Light None;
 extern Light PWM;

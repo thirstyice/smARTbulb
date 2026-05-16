@@ -32,7 +32,7 @@ MakeSettings("light",
 ** @brief Module array
 **
 **/
-Light* const Light::modules[] = {
+Light* const modules[] = {
 	&None,
 	&PWM
 };
@@ -43,7 +43,7 @@ Light* const Light::modules[] = {
 **
 **/
 
-const uint8_t Light::numModules = sizeof(modules) / sizeof(modules[0]);
+const uint8_t numModules = sizeof(modules) / sizeof(modules[0]);
 
 uint8_t colors[Color::End];
 
@@ -71,7 +71,7 @@ int8_t getOutFromColor(Color color) {
 }
 
 
-void Light::setColor(Color color, uint8_t value) {
+void setColor(Color color, uint8_t value) {
 	if (colors[color] == value) {
 		return;
 	}
@@ -87,16 +87,16 @@ void Light::setColor(Color color, uint8_t value) {
 	modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
 }
 
-uint8_t Light::getColor(Color color) {
+uint8_t getColor(Color color) {
 	return colors[color];
 }
 
 
-bool Light::hasRGB() {
+bool hasRGB() {
 	return (redChan.val>=0) && (greenChan.val>=0) && (blueChan.val>=0);
 }
 
-bool Light::hasCT() {
+bool hasCT() {
 	return (coolChan.val>=0) && (warmChan.val>=0);
 }
 
