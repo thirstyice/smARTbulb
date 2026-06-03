@@ -122,6 +122,9 @@ public:
 	SettingType(Preferences& _prefs, String _key, String _val) : Setting(_prefs, _key), var(_val) {}
 	String& val = var;
 	bool recall() override {
+		if (!prefs.isKey(key.c_str())) {
+			return true;
+		}
 		var = prefs.getString(key.c_str(), var);
 		return true;
 	}
