@@ -47,27 +47,27 @@ protected:
 		return false;
 	}
 public:
-	SettingTypeBase(const char* _key, T _val) : Setting(_key), var(_val) {}
+	explicit SettingTypeBase(Preferences& _prefs, String _key, T _val) : Setting(_prefs, _key), var(_val) {}
 
-	virtual bool recall(Preferences* prefs) override {
-		if (!prefs->isKey(key)) {
+	virtual bool recall() override {
+		if (!prefs.isKey(key.c_str())) {
 			return true;
 		}
-		if (prefs->getBytesLength(key) < size) {
+		if (prefs.getBytesLength(key.c_str()) < size) {
 			return false;
 		}
 		B buffer;
-		if (prefs->getBytes(key, buffer.bytes, size) == size) {
+		if (prefs.getBytes(key.c_str(), buffer.bytes, size) == size) {
 			var = buffer.var;
 			return true;
 		}
 		return false;
 	}
 
-	virtual bool save(Preferences* prefs) override {
+	virtual bool save() override {
 		B buffer;
 		buffer.var = var;
-		if (prefs->putBytes(key, buffer.bytes, size) == size) {
+		if (prefs.putBytes(key.c_str(), buffer.bytes, size) == size) {
 			return true;
 		}
 		return false;
@@ -92,18 +92,18 @@ protected:
 	}
 public:
 	IPAddress val;
-	SettingType(const char* _key, IPAddress _val) : SettingTypeBase<uint32_t>(_key, uint32_t(_val)), val(_val) {}
-	bool recall(Preferences* prefs) override {
-		if (SettingTypeBase<uint32_t>::recall(prefs)) {
+	SettingType(Preferences& _prefs, String _key, IPAddress _val) : SettingTypeBase<uint32_t>(_prefs, _key, uint32_t(_val)), val(_val) {}
+	bool recall() override {
+		if (SettingTypeBase<uint32_t>::recall()) {
 			val = IPAddress(var);
 			return true;
 		}
 		return false;
 	}
 
-	bool save(Preferences* prefs) override {
+	bool save() override {
 		var = uint32_t(val);
-		return SettingTypeBase<uint32_t>::save(prefs);
+		return SettingTypeBase<uint32_t>::save();
 	}
 	String getAsString() override {
 		return val.toString();
@@ -119,14 +119,14 @@ protected:
 		return true;
 	}
 public:
-	SettingType(const char* _key, String _val) : Setting(_key), var(_val) {}
+	SettingType(Preferences& _prefs, String _key, String _val) : Setting(_prefs, _key), var(_val) {}
 	String& val = var;
-	bool recall(Preferences* prefs) override {
-		var = prefs->getString(key, var);
+	bool recall() override {
+		var = prefs.getString(key.c_str(), var);
 		return true;
 	}
-	bool save(Preferences* prefs) override {
-		if (prefs->putString(key, var) == 0) {
+	bool save() override {
+		if (prefs.putString(key.c_str(), var) == 0) {
 			return false;
 		}
 		return true;

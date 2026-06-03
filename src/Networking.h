@@ -14,10 +14,13 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include "Settings.h"
 
 namespace Networking {
 
 extern bool connected;
+extern volatile bool settingsDidUpdate;
+extern Settings settings;
 
 void networkingTask(void*);
 }

@@ -11,20 +11,8 @@
 *******************************************************************************/
 #include "Settings.h"
 
-std::map<const std::string, std::map<const std::string, Setting*>> Settings::sections = {};
-Preferences prefsObj = Preferences{};
-
-Preferences* Settings::getPrefs(const char* section) {
-	if (prefsObj.begin(section)) {
-		return &prefsObj;
-	}
-	prefsObj.end();
-	return getPrefs(section);
-}
-
 bool Setting::setFromString(String string) {
 	if (parseString(string)) {
-		updated = true;
 		return true;
 	}
 	return false;

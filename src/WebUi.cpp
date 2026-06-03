@@ -41,16 +41,35 @@ String getGenericVar(String var) {
 	return emptyString;
 }
 
+void setSettings(Settings& settings, JsonVariant& json) {
+	for (auto const setting : settings) {
+		const char* value = json[setting.first].as<const char*>();
+		if (value==NULL || !setting.second->setFromString(String(value))) {
+			log_w("Could not set setting %s to value %s!", setting.first, url, value);
+		} else {
+			setting.second->save();
+		}
+		json.remove(setting.first);
+	}
+	for (uint8_t i=0; i<json.size(); i++) {
+		log_w("Setting %s does not exist!", json[i]);
+	}
+}
+
 void begin() {
 	log_i("Begin WebUI");
 
 	server.on("/config/network.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-			if (Settings::sections["network"].contains(var.c_str())) {
-				return Settings::sections["network"][var.c_str()]->getAsString();
+			if (Networking::settings.contains(var.c_str())) {
+				return Networking::settings[var.c_str()]->getAsString();
 			}
 			return getGenericVar(var);
 		});
+	});
+	server.on("/config/network", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		setSettings(Networking::settings, json);
+		request->send(200);
 	});
 
 
@@ -66,13 +85,17 @@ void begin() {
 						out += light::modules[i]->name;
 						out += "</option>\n";
 					}
-					if (Settings::sections["light"].contains(var.c_str())) {
-						return Settings::sections["light"][var.c_str()]->getAsString();
+					if (light::settings.contains(var.c_str())) {
+						return light::settings[var.c_str()]->getAsString();
 					}
 					return out;
 				}
 			return getGenericVar(var);
 		});
+	});
+	server.on("/config/light", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		setSettings(light::settings, json);
+		request->send(200);
 	});
 
 
@@ -80,7 +103,7 @@ void begin() {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "GPIO") {
 				String out = String("\0\0", 150);
-				light::Light* module = light::modules[Settings::sections["light"]["moduleIndex"]->getAsString().toInt()];
+				light::Light* module = light::modules[light::settings["moduleIndex"]->getAsString().toInt()];
 				for (uint8_t i=0; i<module->numGPIO; i++) {
 					char name[8];
 					snprintf(name, 8, "gpio%d", i);
@@ -91,8 +114,8 @@ void begin() {
 					out += "</label></td>\n<td><input id='";
 					out += name;
 					out += "' type='number' min='-1' max='40' value='";
-					if (Settings::sections["light"].contains(name)) {
-						out += Settings::sections["light"][name]->getAsString();
+					if (light::settings.contains(name)) {
+						out += light::settings[name]->getAsString();
 					} else {
 						out += "-1";
 					}
@@ -103,6 +126,9 @@ void begin() {
 			return getGenericVar(var);
 		});
 	});
+	server.on("/config/module", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		// TODO
+	});
 
 
 	server.on("/config/control.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
@@ -110,6 +136,10 @@ void begin() {
 			// TODO
 			return getGenericVar(var);
 		});
+	});
+	server.on("/config/network", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		// setSettings( ::settings, json);
+		request->send(200);
 	});
 
 
@@ -139,30 +169,6 @@ void begin() {
 
 	wsHandler.onMessage([](AsyncWebSocket *server, AsyncWebSocketClient *client, const uint8_t *data, size_t len) {
 
-	});
-
-	server.on("/config", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		log_i("Received settings for %s:\n%s", request->url(), json.as<String>());
-		String url = request->url();
-		url.remove(url.indexOf(".htm"));
-		url = url.substring(url.lastIndexOf("/")+1);
-		if (Settings::sections.contains(url.c_str())) {
-			for (auto const setting : Settings::sections[url.c_str()]) {
-				const char* value = json[setting.first].as<const char*>();
-				if (value==NULL || !setting.second->setFromString(String(value))) {
-					log_w("Could not set setting %s in section %s to value %s!", setting.first, url, value);
-				} else {
-					setting.second->save(Settings::getPrefs(url.c_str()));
-				}
-				json.remove(setting.first);
-			}
-			for (uint8_t i=0; i<json.size(); i++) {
-				log_w("Setting %s does not exist in section %s!", json[i], url);
-			}
-		} else {
-			log_e("Could not find setting section %s from url %s", url, request->url());
-		}
-		request->send(200);
 	});
 
 	server.begin();
