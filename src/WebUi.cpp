@@ -45,7 +45,7 @@ void setSettings(Settings& settings, JsonVariant& json) {
 	for (auto const setting : settings) {
 		const char* value = json[setting.first].as<const char*>();
 		if (value==NULL || !setting.second->setFromString(String(value))) {
-			log_w("Could not set setting %s to value %s!", setting.first, url, value);
+			log_w("Could not set setting %s to value %s!", setting.first, value);
 		} else {
 			setting.second->save();
 		}
