@@ -25,23 +25,12 @@ MakeSettings(
 	(int8_t, warmChan, -1)
 );
 
-
-/**
-** @brief Module array
-**
-**/
-Light* const modules[] = {
-	&None,
-	&PWM
-};
-
-
 /**
 ** @section Internals
 **
 **/
 
-const uint8_t numModules = sizeof(modules) / sizeof(modules[0]);
+std::map<uint16_t, Light*> Light::modules;
 
 uint8_t colors[Color::End];
 
@@ -82,7 +71,7 @@ void setColor(Color color, uint8_t value) {
 	}
 	uint16_t out = colors[Intensity];
 	out *= colors[color];
-	modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
+	Light::modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
 }
 
 uint8_t getColor(Color color) {

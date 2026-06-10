@@ -1,36 +1,27 @@
 /*******************************************************************************
 * Project: smARTbulb                                                           *
-* Filename: /include/light/Module-Template.h                                   *
+* Filename: /include/modules.h                                                 *
 *                                                                              *
-* Created: 2026-04-27                                                          *
+* Created: 2026-06-10                                                          *
 * Author: thirstyice                                                           *
 *                                                                              *
 * Copyright (c) 2026 Tauran - https://github.com/thirstyice                    *
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-#include "Light.h"
+#pragma once
 
-#ifdef MODULE_NONE
+/**
+** @brief Enable / Disable modules
+**
+**/
 
-namespace light {
 
-namespace none {
+/**
+** @brief Comment out lines to disable the associated module
+**
+**/
 
-	void begin()  {
+#define MODULE_NONE 0
 
-	};
-	void end() {
-
-	};
-	void out(uint8_t, uint16_t) {
-
-	};
-
-} // namespace none
-
-Light None{MODULE_NONE, "No Module Selected", 0, nullptr, none::begin, none::end, none::out};
-
-} // namespace light
-
-#endif
+#define MODULE_PWM 1
