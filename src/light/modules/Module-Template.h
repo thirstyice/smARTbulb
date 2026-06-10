@@ -1,31 +1,21 @@
 /*******************************************************************************
 * Project: smARTbulb                                                           *
-* Filename: /include/light/pwm.h                                               *
+* Filename: /include/light/Module-Template.h                                   *
 *                                                                              *
-* Created: 2026-04-23                                                          *
+* Created: 2026-04-27                                                          *
 * Author: thirstyice                                                           *
 *                                                                              *
 * Copyright (c) 2026 Tauran - https://github.com/thirstyice                    *
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-#include "Light.h"
+#pragma once
 
-#ifdef MODULE_PWM
+#include "../Light.h"
 
-#include <driver/ledc.h>
+#ifdef INCLUDE_NONE
 
-namespace light {
-
-namespace pwm {
-	const char * const gpioNames[] = {
-		"Output 1",
-		"Output 2",
-		"Output 3",
-		"Output 4",
-		"Output 5"
-	};
-	const uint8_t numGPIO = sizeof(gpioNames) / sizeof(gpioNames[0]);
+namespace none {
 
 	void begin()  {
 
@@ -36,10 +26,9 @@ namespace pwm {
 	void out(uint8_t, uint16_t) {
 
 	};
-} // namespace pwm
 
-Light PWM{MODULE_PWM, "PWM", pwm::numGPIO, pwm::gpioNames, pwm::begin, pwm::end, pwm::out};
+} // namespace none
 
-} // namespace light
+Light None{"No Module Selected", 0, nullptr, none::begin, none::end, none::out};
 
 #endif

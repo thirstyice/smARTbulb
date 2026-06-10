@@ -30,8 +30,6 @@ MakeSettings(
 **
 **/
 
-std::map<uint16_t, Light*> Light::modules;
-
 uint8_t colors[Color::End];
 
 int8_t getOutFromColor(Color color) {
@@ -71,7 +69,7 @@ void setColor(Color color, uint8_t value) {
 	}
 	uint16_t out = colors[Intensity];
 	out *= colors[color];
-	Light::modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
+	modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
 }
 
 uint8_t getColor(Color color) {
@@ -86,5 +84,27 @@ bool hasRGB() {
 bool hasCT() {
 	return (coolChan.val>=0) && (warmChan.val>=0);
 }
+
+
+/**
+** @section Module definitions
+**
+**/
+
+#include "modules/Module-Template.h"
+#include "modules/pwm.h"
+
+
+
+std::map<uint16_t, Light*> modules = {
+#ifdef INCLUDE_PWM
+	{1, &PWM},
+#endif
+	{0, &None}
+};
+
+
+
+
 
 } // namespace light

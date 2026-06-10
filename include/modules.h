@@ -11,17 +11,11 @@
 *******************************************************************************/
 #pragma once
 
-/**
-** @brief Enable / Disable modules
-**
-**/
-
+#include "macros.h"
 
 /**
 ** @brief Comment out lines to disable the associated module
 **
 **/
 
-#define MODULE_NONE 0
-
-#define MODULE_PWM 1
+#define INCLUDE_PWM

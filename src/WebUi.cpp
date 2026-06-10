@@ -77,7 +77,7 @@ void begin() {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 				if (var == "MODULES") {
 					String out;
-					for (const auto& [id, module] : light::Light::modules) {
+					for (const auto& [id, module] : light::modules) {
 						out += "<option value='";
 						out += String(id);
 						out += "'>";
@@ -102,7 +102,7 @@ void begin() {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "GPIO") {
 				String out = String("\0\0", 150);
-				light::Light* module = light::Light::modules[light::settings["moduleIndex"]->getAsString().toInt()];
+				Light* module = light::modules[light::settings["moduleIndex"]->getAsString().toInt()];
 				for (uint8_t i=0; i<module->numGPIO; i++) {
 					char name[8];
 					snprintf(name, 8, "gpio%d", i);
