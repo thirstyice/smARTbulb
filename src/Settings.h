@@ -37,8 +37,8 @@ FOR_EACH(_DEFINE_SETTING, __VA_ARGS__) \
 Settings settings{ SETTING_MAP(__VA_ARGS__) }
 
 #define BeginSettings(sectionName) prefs.begin(sectionName);
-#define SaveSettings() for (auto const& setting : settings) {setting.second->save();}
-#define RecallSettings() for (auto const& setting : settings) {setting.second->recall();}
+#define SaveSettings() for (auto& setting : settings) {setting.second->save();}
+#define RecallSettings() for (auto& setting : settings) {setting.second->recall();}
 
 
 
