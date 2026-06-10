@@ -48,14 +48,14 @@ class Setting {
 	typedef std::function<void(Setting*)> SettingCallback;
 protected:
 	SettingCallback callback;
-	String& key;
+	const char * key;
 	Preferences& prefs;
 	virtual bool parseString(String) =0;
 public:
 	static constexpr void blankSettingCallback(Setting*) {}
-	explicit Setting(Preferences& _prefs, String& _key): prefs(_prefs), key(_key) {}
+	Setting(Preferences& _prefs, const char * _key): prefs(_prefs), key(_key) {}
 	void setCallback(SettingCallback _callback) {callback = _callback;}
-	constexpr const String& getKey() {return key;}
+	constexpr const char * getKey() {return key;}
 	virtual bool recall() =0;
 	virtual bool save() =0;
 	bool setFromString(String string);

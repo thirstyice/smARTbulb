@@ -47,17 +47,17 @@ protected:
 		return false;
 	}
 public:
-	explicit SettingTypeBase(Preferences& _prefs, String _key, T _val) : Setting(_prefs, _key), var(_val) {}
+	SettingTypeBase(Preferences& _prefs, const char * _key, T _val) : Setting(_prefs, _key), var(_val) {}
 
 	virtual bool recall() override {
-		if (!prefs.isKey(key.c_str())) {
+		if (!prefs.isKey(key)) {
 			return true;
 		}
-		if (prefs.getBytesLength(key.c_str()) < size) {
+		if (prefs.getBytesLength(key) < size) {
 			return false;
 		}
 		B buffer;
-		if (prefs.getBytes(key.c_str(), buffer.bytes, size) == size) {
+		if (prefs.getBytes(key, buffer.bytes, size) == size) {
 			var = buffer.var;
 			return true;
 		}
@@ -67,7 +67,7 @@ public:
 	virtual bool save() override {
 		B buffer;
 		buffer.var = var;
-		if (prefs.putBytes(key.c_str(), buffer.bytes, size) == size) {
+		if (prefs.putBytes(key, buffer.bytes, size) == size) {
 			return true;
 		}
 		return false;
@@ -92,7 +92,7 @@ protected:
 	}
 public:
 	IPAddress val;
-	SettingType(Preferences& _prefs, String _key, IPAddress _val) : SettingTypeBase<uint32_t>(_prefs, _key, uint32_t(_val)), val(_val) {}
+	SettingType(Preferences& _prefs, const char * _key, IPAddress _val) : SettingTypeBase<uint32_t>(_prefs, _key, uint32_t(_val)), val(_val) {}
 	bool recall() override {
 		if (SettingTypeBase<uint32_t>::recall()) {
 			val = IPAddress(var);
@@ -119,17 +119,17 @@ protected:
 		return true;
 	}
 public:
-	SettingType(Preferences& _prefs, String _key, String _val) : Setting(_prefs, _key), var(_val) {}
+	SettingType(Preferences& _prefs, const char * _key, String _val) : Setting(_prefs, _key), var(_val) {}
 	String& val = var;
 	bool recall() override {
-		if (!prefs.isKey(key.c_str())) {
+		if (!prefs.isKey(key)) {
 			return true;
 		}
-		var = prefs.getString(key.c_str(), var);
+		var = prefs.getString(key, var);
 		return true;
 	}
 	bool save() override {
-		if (prefs.putString(key.c_str(), var) == 0) {
+		if (prefs.putString(key, var) == 0) {
 			return false;
 		}
 		return true;
