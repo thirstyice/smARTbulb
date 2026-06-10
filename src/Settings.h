@@ -32,7 +32,7 @@
 ** using `{setting name}.val`.
 ** See Settings class for more details.
 **/
-#define MakeSettings(...) Preferences prefs{};\
+#define MakeSettings(...) Preferences prefs;\
 FOR_EACH(_DEFINE_SETTING, __VA_ARGS__) \
 Settings settings{ SETTING_MAP(__VA_ARGS__) }
 
