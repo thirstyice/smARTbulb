@@ -86,17 +86,3 @@
 #ifndef AP_PASS
 	#define AP_PASS "smartbulb"
 #endif
-
-/**
-** @brief Logging options
-**
-**/
-#ifndef Log
-	#define Log logger // Print*, logs to log history and Serial by default
-#endif
-#ifndef LOGLINES
-	#define LOGLINES 200
-#endif
-#ifndef LOGCOLS
-	#define LOGCOLS 80
-#endif
