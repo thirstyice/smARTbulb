@@ -16,7 +16,9 @@ function saveSettings() {
 	let selects = document.getElementById("settings").getElementsByTagName("select");
 	let settings = {};
 	for (const input of inputs) {
-		settings[input.id] = input.value;
+		if (input.value != input.placeholder) {
+			settings[input.id] = input.value;
+		}
 	}
 	for (const select of selects) {
 		settings[select.id] = select.value;
