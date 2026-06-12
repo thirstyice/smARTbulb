@@ -42,17 +42,19 @@ String getGenericVar(String var) {
 }
 
 void setSettings(Settings& settings, JsonVariant& json) {
-	for (auto setting : settings) {
-		const char* value = json[setting.first].as<const char*>();
-		if (value==NULL || !setting.second->setFromString(String(value))) {
+	for (auto &setting : settings) {
+		const char* value = json[setting.second->getKey()].as<const char*>();
+		if (value==NULL) {
+			log_i("Setting %s not found in json, skipping", setting.second->getKey());
+		} else if (!setting.second->setFromString(String(value))) {
 			log_w("Could not set setting %s to value %s!", setting.first, value);
 		} else {
 			setting.second->save();
 		}
 		json.remove(setting.first);
 	}
-	for (uint8_t i=0; i<json.size(); i++) {
-		log_w("Setting %s does not exist!", json[i]);
+	for (auto pair : json.as<JsonObject>()) {
+		log_i("Setting %s in Json, does not exist", pair.key().c_str());
 	}
 }
 
@@ -87,7 +89,6 @@ void begin() {
 				return out;
 			}
 			if (light::settings.contains(var)) {
-				Serial.println(var);
 				return light::settings[var]->getAsString();
 			}
 			return getGenericVar(var);
