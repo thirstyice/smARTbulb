@@ -38,11 +38,11 @@ public:
 		endFunc();
 	}
 	const char * const name;
-	const uint8_t& numGPIO;
+	const uint8_t numGPIO;
 	const char * const * gpioNames;
 	Light(
 		const char * const _name,
-		const uint8_t& _numGPIO,
+		const uint8_t _numGPIO,
 		const char * const * _gpioNames,
 		std::function<void()> _beginFunc,
 		std::function<void()> _endFunc,
