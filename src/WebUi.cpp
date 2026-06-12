@@ -42,7 +42,7 @@ String getGenericVar(String var) {
 }
 
 void setSettings(Settings& settings, JsonVariant& json) {
-	for (auto const setting : settings) {
+	for (auto setting : settings) {
 		const char* value = json[setting.first].as<const char*>();
 		if (value==NULL || !setting.second->setFromString(String(value))) {
 			log_w("Could not set setting %s to value %s!", setting.first, value);
@@ -137,7 +137,7 @@ void begin() {
 		});
 	});
 	server.on("/config/network", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		// setSettings( ::settings, json);
+		setSettings( Networking::settings, json);
 		request->send(200);
 	});
 
