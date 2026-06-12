@@ -75,20 +75,21 @@ void begin() {
 
 	server.on("/config/light.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-				if (var == "MODULES") {
-					String out;
-					for (const auto& [id, module] : light::modules) {
-						out += "<option value='";
-						out += String(id);
-						out += "'>";
-						out += module->name;
-						out += "</option>\n";
-					}
-					if (light::settings.contains(var.c_str())) {
-						return light::settings[var.c_str()]->getAsString();
-					}
-					return out;
+			if (var == "MODULES") {
+				String out;
+				for (const auto& [id, module] : light::modules) {
+					out += "<option value='";
+					out += String(id);
+					out += "'>";
+					out += module->name;
+					out += "</option>\n";
 				}
+				return out;
+			}
+			if (light::settings.contains(var)) {
+				Serial.println(var);
+				return light::settings[var]->getAsString();
+			}
 			return getGenericVar(var);
 		});
 	});
