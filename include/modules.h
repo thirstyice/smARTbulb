@@ -11,8 +11,6 @@
 *******************************************************************************/
 #pragma once
 
-#include "macros.h"
-
 /**
 ** @brief Comment out lines to disable the associated module
 **
