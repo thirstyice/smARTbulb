@@ -103,7 +103,8 @@ void begin() {
 	server.on("/config/module.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "GPIO") {
-				String out = String("\0\0", 150);
+				String out = "";
+				out.reserve(150);
 				Light* module = light::modules[light::settings["moduleIndex"]->getAsString().toInt()];
 				for (uint8_t i=0; i<module->numGPIO; i++) {
 					char name[8];
