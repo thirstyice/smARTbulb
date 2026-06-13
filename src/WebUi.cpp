@@ -141,6 +141,7 @@ void begin() {
 	});
 	server.on("/config/network", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
 		setSettings( Networking::settings, json);
+		// TODO: Restart networking, so settings take effect
 		request->send(200);
 	});
 
