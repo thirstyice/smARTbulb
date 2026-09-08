@@ -41,23 +41,6 @@ String getGenericVar(String var) {
 	return emptyString;
 }
 
-void setSettings(Settings& settings, JsonVariant& json) {
-	for (auto &setting : settings) {
-		const char* value = json[setting.second->getKey()].as<const char*>();
-		if (value==NULL) {
-			log_i("Setting %s not found in json, skipping", setting.second->getKey());
-		} else if (!setting.second->setFromString(String(value))) {
-			log_w("Could not set setting %s to value %s!", setting.first, value);
-		} else {
-			setting.second->save();
-		}
-		json.remove(setting.first);
-	}
-	for (auto pair : json.as<JsonObject>()) {
-		log_i("Setting %s in Json, does not exist", pair.key().c_str());
-	}
-}
-
 void begin() {
 	log_i("Begin WebUI");
 

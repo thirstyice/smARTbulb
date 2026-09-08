@@ -13,7 +13,7 @@
 
 #include "../Light.h"
 
-#ifdef INCLUDE_NONE
+#ifndef NO_INCLUDE_NONE
 
 namespace none {
 

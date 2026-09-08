@@ -12,7 +12,6 @@
 #pragma once
 #include <Arduino.h>
 #include "modules.h"
-#include "Settings.h"
 
 
 /**
@@ -59,15 +58,15 @@ public:
 
 namespace light {
 
-	enum Color : uint8_t {
-		Intensity=0,
-		Red,
-		Green,
-		Blue,
-		Cool,
-		Warm,
-		End
-	};
+enum Color : uint8_t {
+	Intensity=0,
+	Red,
+	Green,
+	Blue,
+	Cool,
+	Warm,
+	End
+};
 
 
 void setColor(Color, uint8_t);
@@ -76,8 +75,7 @@ bool hasRGB();
 bool hasCT();
 
 extern std::map<uint16_t, Light*> modules;
-extern Settings settings;
+extern uint8_t moduleIndex;
+extern int8_t colorChan[Color::End - 1];
 
 } // namespace light
-
-#define INCLUDE_NONE // Include the empty module

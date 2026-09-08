@@ -19,18 +19,13 @@
 namespace Networking {
 	volatile bool settingsDidUpdate = false;
 
-MakeSettings(
-	(IPAddress, ip, INITIAL_IP),
-	(IPAddress, gateway, INITIAL_GATEWAY),
-	(IPAddress, subnet, INITIAL_SUBNET),
-	(String, wifiSSID1, WIFI_INITIAL_SSID),
-	(String, wifiPasscode1, WIFI_INITIAL_PASS),
-	(String, wifiSSID2, WIFI_INITIAL_SSID2),
-	(String, wifiPasscode2, WIFI_INITIAL_PASS2),
-	(String, hostname, INITIAL_HOSTNAME),
-	(String, apSSID, AP_SSID),
-	(String, apPass, AP_PASS)
-);
+	IPAddress ip = INITIAL_IP;
+	IPAddress gateway = INITIAL_IP;
+	IPAddress subnet = INITIAL_IP;
+	std::map<String, String> wifi {{WIFI_INITIAL_SSID, WIFI_INITIAL_PASS}};
+	String hostname = INITIAL_HOSTNAME;
+	String apSSID = AP_SSID;
+	String apPass = AP_PASS;
 
 bool connected = false;
 
@@ -87,7 +82,7 @@ void useAPMode() {
 	WiFi.disconnect();
 	WiFi.enableSTA(false);
 	WiFi.enableAP(true);
-	while (!WiFi.softAP(apSSID.val, apPass.val)) {
+	while (!WiFi.softAP(apSSID, apPass)) {
 		log_w("AP mode failure! Will try again");
 		vTaskDelay(1000);
 	}
@@ -98,21 +93,22 @@ void networkingTask(void*) {
 	unsigned long beginTime;
 	uint8_t mac[6];
 	log_i("Begin Networking");
-	BeginSettings("networking");
-	WiFi.macAddress(mac);
-	hostname.val += "-";
-	for (uint8_t i = 3; i<6; i++) {
-		hostname.val += String(mac[i], 16);
+	if (hostname == INITIAL_HOSTNAME) {
+		WiFi.macAddress(mac);
+		hostname += "-";
+		for (uint8_t i = 3; i<6; i++) {
+			hostname += String(mac[i], 16);
+		}
 	}
-	RecallSettings();
 	log_i("Begin WiFi");
 	WiFi.onEvent(WiFiEvent);
-	WiFi.setHostname(hostname.val.c_str());
+	WiFi.setHostname(hostname.c_str());
 	WiFi.enableSTA(true);
 	WiFi.STA.setDefault();
-	WiFi.config(ip.val, gateway.val, subnet.val);
-	wifiMulti.addAP(wifiSSID1.val.c_str(), wifiPasscode1.val.c_str());
-	wifiMulti.addAP(wifiSSID2.val.c_str(), wifiPasscode2.val.c_str());
+	WiFi.config(ip, gateway, subnet);
+	for (const auto& [ssid, pass] : wifi) {
+		wifiMulti.addAP(ssid.c_str(), pass.c_str());
+	}
 	beginTime = millis();
 	while (wifiMulti.run() != WL_CONNECTED) {
 		if (millis() - beginTime > WIFI_TIMEOUT) {

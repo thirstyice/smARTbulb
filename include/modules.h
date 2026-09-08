@@ -12,8 +12,8 @@
 #pragma once
 
 /**
-** @brief Comment out lines to disable the associated module
+** @brief Uncomment lines to disable the associated module
 **
 **/
 
-#define INCLUDE_PWM
+// #define NO_INCLUDE_PWM
