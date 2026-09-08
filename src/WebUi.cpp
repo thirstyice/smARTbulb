@@ -82,7 +82,11 @@ void begin() {
 				for (const auto& [id, module] : light::modules) {
 					out += "<option value='";
 					out += String(id);
-					out += "'>";
+					out += "' ";
+					if (String(id) == light::settings["moduleIndex"]->getAsString()) {
+						out += "selected ";
+					}
+					out += ">";
 					out += module->name;
 					out += "</option>\n";
 				}
