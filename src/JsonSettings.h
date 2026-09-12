@@ -13,8 +13,10 @@
 
 #define SETTINGSFILE "settings.json"
 
+JsonDocument settingsDoc;
+
 void saveSettingsToFile(String filePath = SETTINGSFILE);
 
 void updateSettingsFromFile(String filePath = SETTINGSFILE);
 
-void updateSettingsFromJson(ArduinoJson::JsonObject& json);
+void updateSettingsFromJson(JsonObject json);

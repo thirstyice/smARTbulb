@@ -23,7 +23,7 @@ function saveSettings() {
 	for (const select of selects) {
 		settings[select.id] = select.value;
 	}
-	fetch(document.URL.slice(0, document.URL.lastIndexOf(".htm")), {
+	fetch("/config", {
 		body: JSON.stringify(settings),
 		keepalive: true,
 		method: "PUT",

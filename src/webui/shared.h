@@ -1,8 +1,8 @@
 /*******************************************************************************
 * Project: smARTbulb                                                           *
-* Filename: /include/modules.h                                                 *
+* Filename: /src/webui/shared.h                                                *
 *                                                                              *
-* Created: 2026-06-10                                                          *
+* Created: 2026-09-12                                                          *
 * Author: thirstyice                                                           *
 *                                                                              *
 * Copyright (c) 2026 Tauran - https://github.com/thirstyice                    *
@@ -11,9 +11,14 @@
 *******************************************************************************/
 #pragma once
 
-/**
-** @brief Uncomment lines to disable the associated module
-**
-**/
+#include "WebUi.h"
+#include "../JsonSettings.h"
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <LittleFS.h>
+#include <ArduinoJson.h>
 
-// #define NO_INCLUDE_PWM
+namespace WebUi {
+	AsyncWebServer server{80};
+	String getGenericVar(String var);
+} // namespace WebUi

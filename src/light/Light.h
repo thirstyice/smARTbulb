@@ -11,7 +11,9 @@
 *******************************************************************************/
 #pragma once
 #include <Arduino.h>
-#include "modules.h"
+#include <ArxContainer.h> // For std::map
+
+#define MAX_MODULE_GPIO 5
 
 
 /**
@@ -74,8 +76,10 @@ uint8_t getColor(Color);
 bool hasRGB();
 bool hasCT();
 
-extern std::map<uint16_t, Light*> modules;
+extern const int8_t numModules;
+extern Light* modules[numModules];
 extern uint8_t moduleIndex;
 extern int8_t colorChan[Color::End - 1];
+extern int8_t moduleGPIO[MAX_MODULE_GPIO];
 
 } // namespace light

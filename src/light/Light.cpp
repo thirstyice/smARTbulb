@@ -18,6 +18,7 @@ namespace light {
 
 uint8_t moduleIndex = 0;
 int8_t colorChan[Color::End - 1] = {-1, -1, -1, -1, -1};
+int8_t moduleGPIO[MAX_MODULE_GPIO];
 
 /**
 ** @section Internals
@@ -47,7 +48,7 @@ void setColor(Color color, uint8_t value) {
 	}
 	uint16_t out = colors[Intensity];
 	out *= colors[color];
-	modules[moduleIndex.val]->setOutput(getOutFromColor(color), out);
+	modules[moduleIndex]->setOutput(getOutFromColor(color), out);
 }
 
 uint8_t getColor(Color color) {
@@ -73,13 +74,12 @@ bool hasCT() {
 
 
 
-std::map<uint16_t, Light*> modules = {
-#ifndef NO_INCLUDE_PWM
-	{1, &PWM},
-#endif
-	{0, &None}
+Light* modules[] = {
+	&None,
+	&PWM
 };
 
+const uint8_t numModules = sizeof(modules) / sizeof(modules[0]);
 
 
 

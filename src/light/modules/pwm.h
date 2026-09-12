@@ -13,8 +13,6 @@
 
 #include "../Light.h"
 
-#ifndef NO_INCLUDE_PWM
-
 #include <driver/ledc.h>
 
 namespace pwm {
@@ -39,5 +37,3 @@ namespace pwm {
 } // namespace pwm
 
 Light PWM{"PWM", pwm::numGPIO, pwm::gpioNames, pwm::begin, pwm::end, pwm::out};
-
-#endif

@@ -9,19 +9,11 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
-#include "WebUi.h"
-
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
-#include <LittleFS.h>
-#include <ArduinoJson.h>
-
-#include "Settings.h"
-#include "Networking.h"
-#include "light/Light.h"
+#include "shared.h"
+#include "../Networking.h"
+#include "../light/Light.h"
 
 namespace WebUi {
-AsyncWebServer server(80);
 AsyncWebSocketMessageHandler wsHandler;
 AsyncWebSocket ws("/ws", wsHandler.eventHandler());
 
@@ -41,58 +33,34 @@ String getGenericVar(String var) {
 	return emptyString;
 }
 
-void begin() {
-	log_i("Begin WebUI");
-
-	server.on("/config/network.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
+void setupConfigGet() {
+	server.on("/config/*.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
 		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-			if (Networking::settings.contains(var.c_str())) {
-				return Networking::settings[var.c_str()]->getAsString();
+			String filename = request->url().substring(request->url().lastIndexOf("/"), request->url().lastIndexOf("."));
+			log_i("HTTP GET: %s", filename.c_str());
+			JsonVariant json = settingsDoc[].as<JsonVariant>();
+			if (json.containsKey(var)) {
+				return json[var].as<String>();
 			}
-			return getGenericVar(var);
-		});
-	});
-	server.on("/config/network", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		setSettings(Networking::settings, json);
-		request->send(200);
-	});
-
-
-	server.on("/config/light.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
-		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "MODULES") {
 				String out;
-				for (const auto& [id, module] : light::modules) {
+				for (uint8_t i=0; i<light::numModules; i++) {
 					out += "<option value='";
-					out += String(id);
+					out += String(i);
 					out += "' ";
-					if (String(id) == light::settings["moduleIndex"]->getAsString()) {
+					if (i == light::moduleIndex) {
 						out += "selected ";
 					}
 					out += ">";
-					out += module->name;
+					out += light::modules[i]->name;
 					out += "</option>\n";
 				}
 				return out;
 			}
-			if (light::settings.contains(var)) {
-				return light::settings[var]->getAsString();
-			}
-			return getGenericVar(var);
-		});
-	});
-	server.on("/config/light", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		setSettings(light::settings, json);
-		request->send(200);
-	});
-
-
-	server.on("/config/module.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
-		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
 			if (var == "GPIO") {
 				String out = "";
 				out.reserve(150);
-				Light* module = light::modules[light::settings["moduleIndex"]->getAsString().toInt()];
+				Light* module = light::modules[light::moduleIndex];
 				for (uint8_t i=0; i<module->numGPIO; i++) {
 					char name[8];
 					snprintf(name, 8, "gpio%d", i);
@@ -115,8 +83,19 @@ void begin() {
 			return getGenericVar(var);
 		});
 	});
-	server.on("/config/module", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		// TODO
+}
+
+void begin() {
+	log_i("Begin WebUI");
+
+	setupConfigGet();
+
+
+	server.on("/config/module.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
+		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
+
+			return getGenericVar(var);
+		});
 	});
 
 
@@ -126,7 +105,7 @@ void begin() {
 			return getGenericVar(var);
 		});
 	});
-	server.on("/config/network", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+	server.on("/config", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
 		setSettings( Networking::settings, json);
 		// TODO: Restart networking, so settings take effect
 		request->send(200);
