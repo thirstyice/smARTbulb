@@ -18,7 +18,6 @@ namespace light {
 
 uint8_t moduleIndex = 0;
 int8_t colorChan[Color::End - 1] = {-1, -1, -1, -1, -1};
-int8_t moduleGPIO[MAX_MODULE_GPIO];
 
 /**
 ** @section Internals

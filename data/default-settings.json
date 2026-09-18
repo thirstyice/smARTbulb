@@ -1,0 +1,26 @@
+{
+	"network":{
+		"retries": 3,
+		"hostname": "smartbulb",
+		"wifi": {
+			"Test": {
+				"pass": "password",
+				"ip": "0.0.0.0",
+				"subnet": "0.0.0.0",
+				"gateway": "0.0.0.0"
+			}
+		},
+		"eth": {
+			"ip":"0.0.0.0",
+			"gateway":"0.0.0.0",
+			"subnet":"0.0.0.0"
+		},
+		"ap":{
+			"ssid":"smARTbulb",
+			"pass":"smartbulb"
+		}
+	},
+	"light":{
+
+	}
+}

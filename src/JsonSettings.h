@@ -12,11 +12,7 @@
 #include <ArduinoJson.h>
 
 #define SETTINGSFILE "settings.json"
+#define DEFAULTSETTINGSFILE "default-settings.json"
+#define USERDEFAULTSETTINGSFILE "user-settings.json"
 
 JsonDocument settingsDoc;
-
-void saveSettingsToFile(String filePath = SETTINGSFILE);
-
-void updateSettingsFromFile(String filePath = SETTINGSFILE);
-
-void updateSettingsFromJson(JsonObject json);

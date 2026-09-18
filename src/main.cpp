@@ -2,8 +2,6 @@
 #include "Networking.h"
 #include <LittleFS.h>
 
-TaskHandle_t NetworkTaskHandle;
-
 void setup() {
 	Serial.begin(115200);
 	log_d("Begin smARTbulb");
@@ -15,7 +13,7 @@ void setup() {
 		4096,
 		NULL,
 		2,
-		&NetworkTaskHandle
+		&Networking::handle
 	);
 	// Set up to receive data
 }

@@ -10,22 +10,14 @@
 *                                                                              *
 *******************************************************************************/
 #pragma once
-#include "options.h"
 
 #include <Arduino.h>
+#include "JsonSettings.h"
 #include <WiFi.h>
 
 namespace Networking {
 
-extern bool connected;
-extern volatile bool settingsDidUpdate;
-extern IPAddress ip;
-extern IPAddress gateway;
-extern IPAddress subnet;
-extern std::map<String, String> wifi;
-extern String hostname;
-extern String apSSID;
-extern String apPass;
+extern TaskHandle_t handle;
 
 void networkingTask(void*);
 }

@@ -10,8 +10,10 @@
 *                                                                              *
 *******************************************************************************/
 #include "shared.h"
+#include <AsyncJson.h>
 #include "../Networking.h"
 #include "../light/Light.h"
+#include "../smartbulb-version.h"
 
 namespace WebUi {
 AsyncWebSocketMessageHandler wsHandler;
@@ -33,82 +35,18 @@ String getGenericVar(String var) {
 	return emptyString;
 }
 
-void setupConfigGet() {
-	server.on("/config/*.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
-		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-			String filename = request->url().substring(request->url().lastIndexOf("/"), request->url().lastIndexOf("."));
-			log_i("HTTP GET: %s", filename.c_str());
-			JsonVariant json = settingsDoc[].as<JsonVariant>();
-			if (json.containsKey(var)) {
-				return json[var].as<String>();
-			}
-			if (var == "MODULES") {
-				String out;
-				for (uint8_t i=0; i<light::numModules; i++) {
-					out += "<option value='";
-					out += String(i);
-					out += "' ";
-					if (i == light::moduleIndex) {
-						out += "selected ";
-					}
-					out += ">";
-					out += light::modules[i]->name;
-					out += "</option>\n";
-				}
-				return out;
-			}
-			if (var == "GPIO") {
-				String out = "";
-				out.reserve(150);
-				Light* module = light::modules[light::moduleIndex];
-				for (uint8_t i=0; i<module->numGPIO; i++) {
-					char name[8];
-					snprintf(name, 8, "gpio%d", i);
-					out += "<tr>\n<td><label for='";
-					out += name;
-					out += "'>";
-					out += module->gpioNames[i];
-					out += "</label></td>\n<td><input id='";
-					out += name;
-					out += "' type='number' min='-1' max='40' value='";
-					if (light::settings.contains(name)) {
-						out += light::settings[name]->getAsString();
-					} else {
-						out += "-1";
-					}
-					out += "'></td>\n</tr>\n";
-				}
-				return out;
-			}
-			return getGenericVar(var);
-		});
-	});
-}
-
 void begin() {
 	log_i("Begin WebUI");
 
-	setupConfigGet();
-
-
-	server.on("/config/module.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
-		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-
-			return getGenericVar(var);
-		});
-	});
-
-
-	server.on("/config/control.html", HTTP_GET, [] (AsyncWebServerRequest *request) {
-		request->send(LittleFS, "/webui" + request->url(), "text/html", false, [=](const String &var) -> String {
-			// TODO
-			return getGenericVar(var);
-		});
-	});
-	server.on("/config", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		setSettings( Networking::settings, json);
-		// TODO: Restart networking, so settings take effect
+	server.on("/settings", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		// TODO: Set settings
 		request->send(200);
+	});
+
+	server.on("/settings", HTTP_GET, [](AsyncWebServerRequest* request) {
+		AsyncResponseStream* response = request->beginResponseStream("application/json");
+		serializeJson(settingsDoc, *response);
+		request->send(response);
 	});
 
 

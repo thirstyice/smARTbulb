@@ -17,17 +17,10 @@
 
 
 namespace Networking {
-	volatile bool settingsDidUpdate = false;
 
-	IPAddress ip = INITIAL_IP;
-	IPAddress gateway = INITIAL_IP;
-	IPAddress subnet = INITIAL_IP;
-	std::map<String, String> wifi {{WIFI_INITIAL_SSID, WIFI_INITIAL_PASS}};
-	String hostname = INITIAL_HOSTNAME;
-	String apSSID = AP_SSID;
-	String apPass = AP_PASS;
+TaskHandle_t handle;
 
-bool connected = false;
+JsonVariantConst networkSettings = settingsDoc["network"];
 
 WiFiMulti wifiMulti;
 
@@ -51,24 +44,18 @@ void WiFiEvent(WiFiEvent_t event)
 				break;
 		case ARDUINO_EVENT_WIFI_STA_CONNECTED:
 				log_d("WiFi connected");
-				if (ip.val != IPAddress(0UL)) {
-					connected = true;
-				}
 				break;
 		case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
 				log_d("WiFi disconnect");
-				connected = false;
 				break;
 		case ARDUINO_EVENT_WIFI_STA_AUTHMODE_CHANGE:
 				log_d("WiFi authmode");
 				break;
 		case ARDUINO_EVENT_WIFI_STA_GOT_IP:
 				log_d("WiFi got IP");
-				connected = true;
 				break;
 		case ARDUINO_EVENT_WIFI_STA_LOST_IP:
 				log_d("WiFi lost IP");
-				connected = false;
 				break;
 		case ARDUINO_EVENT_WIFI_AP_START:
 				log_d("WiFi AP mode");
@@ -82,7 +69,7 @@ void useAPMode() {
 	WiFi.disconnect();
 	WiFi.enableSTA(false);
 	WiFi.enableAP(true);
-	while (!WiFi.softAP(apSSID, apPass)) {
+	while (!WiFi.softAP(networkSettings["ap"]["ssid"].as<const char*>(), networkSettings["ap"]["pass"].as<const char*>())) {
 		log_w("AP mode failure! Will try again");
 		vTaskDelay(1000);
 	}
@@ -90,39 +77,40 @@ void useAPMode() {
 }
 
 void networkingTask(void*) {
-	unsigned long beginTime;
-	uint8_t mac[6];
 	log_i("Begin Networking");
-	if (hostname == INITIAL_HOSTNAME) {
-		WiFi.macAddress(mac);
-		hostname += "-";
-		for (uint8_t i = 3; i<6; i++) {
-			hostname += String(mac[i], 16);
-		}
-	}
-	log_i("Begin WiFi");
 	WiFi.onEvent(WiFiEvent);
-	WiFi.setHostname(hostname.c_str());
+	WiFi.setHostname(networkSettings["hostname"].as<const char*>());
 	WiFi.enableSTA(true);
 	WiFi.STA.setDefault();
-	WiFi.config(ip, gateway, subnet);
-	for (const auto& [ssid, pass] : wifi) {
-		wifiMulti.addAP(ssid.c_str(), pass.c_str());
+	for (JsonPairConst kv : networkSettings["wifi"].as<JsonObjectConst>()) {
+		wifiMulti.addAP(kv.key().c_str(), kv.value().as<JsonVariantConst>()["pass"].as<const char*>());
 	}
-	beginTime = millis();
+	uint8_t retries = 0;
 	while (wifiMulti.run() != WL_CONNECTED) {
-		if (millis() - beginTime > WIFI_TIMEOUT) {
+		if (retries >= networkSettings["retries"].as<uint8_t>()) {
 			useAPMode();
 			WebUi::begin();
 			while (true) {
 				vTaskDelay(1000);
 			}
 		}
+		retries ++;
+	}
+	String ssid = WiFi.SSID();
+	if (networkSettings["wifi"][ssid]["ip"].as<IPAddress>() != INADDR_NONE) {
+		WiFi.config(
+			networkSettings["wifi"][ssid]["ip"].as<IPAddress>(),
+			networkSettings["wifi"][ssid]["gateway"].as<IPAddress>(),
+			networkSettings["wifi"][ssid]["subnet"].as<IPAddress>()
+		);
 	}
 	WebUi::begin();
 	while (true) {
-		wifiMulti.run();
-		vTaskDelay(2000);
+		if (WiFi.status() != WL_CONNECTED) {
+			log_i("Reconnecting to wifi...");
+			WiFi.reconnect();
+		}
+		vTaskDelay(3000);
 	}
 }
 
