@@ -11,20 +11,22 @@
 *******************************************************************************/
 "use strict";
 
-function saveSettings() {
-	let inputs = document.getElementById("settings").getElementsByTagName("input");
-	let selects = document.getElementById("settings").getElementsByTagName("select");
-	let settings = {};
-	for (const input of inputs) {
-		if (input.value != input.placeholder) {
-			settings[input.id] = input.value;
+async function loadSettings(file, count=0) {
+  const response = await fetch(file);
+	if (response.ok == false) {
+		count++;
+		console.error("Failed to get settings json!");
+		if (count<5) {
+			loadSettings(file, count);
 		}
+		return;
 	}
-	for (const select of selects) {
-		settings[select.id] = select.value;
-	}
-	fetch("/config", {
-		body: JSON.stringify(settings),
+	settingsUpdate(response.json());
+}
+
+function sendConfig(config) {
+	fetch("/settings", {
+		body: JSON.stringify(config),
 		keepalive: true,
 		method: "PUT",
 		headers: {
@@ -34,5 +36,6 @@ function saveSettings() {
 }
 
 addEventListener("DOMContentLoaded", () => {
+	loadJSON("/settings");
 	document.getElementById("saveButton").addEventListener("click", saveSettings);
 });
