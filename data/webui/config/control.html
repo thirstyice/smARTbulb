@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="/common/common.css"/>
 		<script src="/common/common.js"></script>
 		<script src="config.js"></script>
+		<script src="control.js"></script>
 	</head>
 	<body>
 		<div id="header">
@@ -26,28 +27,16 @@
 		<div id="settings">
 			<label for="protocol">Protocol:</label>
 			<select id="protocol">
-				%PROTOCOLS%
+				<option value="none">Disabled</option>
+				<option value="sacn">sACN</option>
+				<option value="artnet">ArtNet</option>
 			</select>
-			<table id="addressing">
-				<tbody>
-					<tr>
-						<td><label for="net">Net:</label></td>
-						<td><input id="net" type="number" min="0" max="65535" value="%net%"></td>
-					</tr>
-					<tr>
-						<td><label for="sub-net">Sub-net:</label></td>
-						<td><input id="sub-net" type="number" min="0" max="65535" value="%subnet%"></td>
-					</tr>
-					<tr>
-						<td><label for="universe">Universe:</label></td>
-						<td><input id="universe" type="number" min="0" max="65535" value="%universe%"></td>
-					</tr>
-					<tr>
-						<td><label for="address">Address:</label></td>
-						<td><input id="address" type="number" min="0" max="512" value="%address%"></td>
-					</tr>
-				</tbody>
-			</table>
+			<label for="universe">Universe:</label>
+			<input id="universe" type="number" min="0" max="65535" value="">
+			<label for="address">Address:</label>
+			<input id="address" type="number" min="0" max="512" value="">
+			<label for="timeout">Timeout (ms) (0=never):</label>
+			<input id="timeout" type="number" min="0" max="4294967295" value="">
 		</div>
 		<div class="save">
 			<button id="saveButton" type="button">Save</button>

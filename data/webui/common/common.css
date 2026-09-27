@@ -86,7 +86,7 @@ button {
 	font-size: 20px;
 	font-weight: bold;
 }
-#settings input[type="text"], #settings select {
+#settings input, #settings select {
 	box-sizing: border-box;
 	width: 100%;
 	font-size: 15px;

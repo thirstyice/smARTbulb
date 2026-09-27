@@ -16,6 +16,20 @@
 		}
 	},
 	"light":{
-
+		"module": {
+			"type": "pwm",
+			"gpio1": 21,
+			"gpio2": -1,
+			"gpio3": -1,
+			"gpio4": -1,
+			"gpio5": -1
+		},
+		"chanmap": [0, 1, 2, 3, 4]
+	},
+	"control": {
+		"protocol": "artnet",
+		"universe": 1,
+		"address": 1,
+		"timeout": 5000
 	}
 }
