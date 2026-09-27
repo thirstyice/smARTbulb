@@ -55,6 +55,7 @@ function settingsUpdate(jsonData) {
 	document.getElementById('hostname').setAttribute("value", networkSettings.hostname);
 	document.getElementById('apSSID').setAttribute("value", networkSettings.ap.ssid);
 	document.getElementById("apPass").setAttribute("value", networkSettings.ap.pass);
+	document.getElementById("retries").value = networkSettings.retries;
 }
 
 function saveSettings() {
@@ -72,6 +73,7 @@ function saveSettings() {
 	network.hostname = document.getElementById("hostname").value;
 	network.ap.ssid = document.getElementById("apSSID").value;
 	network.ap.pass = document.getElementById("apPass").value;
+	network.retries = document.getElementById("retries").value;
 	let config = { network: network };
 	sendConfig(config);
 }

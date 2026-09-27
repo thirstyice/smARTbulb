@@ -34,6 +34,8 @@
 			<input id="hostname" type="text" pattern="[a-zA-Z0-9][\-a-zA-Z0-9]*[a-zA-Z0-9]" maxlength="63">
 			<div>Also used for mDNS (hostname.local)</div>
 			<hr/>
+			<label for="retries">Wifi retries: (0=forever)</label>
+			<input id="retries" type="number" min="0" max="255">
 			<label for="apSSID">Access point SSID:</label>
 			<input id="apSSID" type="text" value="%apSSID%" maxlength="32">
 			<label for="apPass">Access point Password:</label>
