@@ -21,11 +21,11 @@ async function loadSettings(file, count=0) {
 		}
 		return;
 	}
-	settingsUpdate(response.json());
+	settingsUpdate(await response.json());
 }
 
 function sendConfig(config) {
-	fetch("/settings", {
+	fetch("/settings.json", {
 		body: JSON.stringify(config),
 		keepalive: true,
 		method: "PUT",
@@ -36,6 +36,6 @@ function sendConfig(config) {
 }
 
 addEventListener("DOMContentLoaded", () => {
-	loadJSON("/settings");
+	loadSettings("/settings.json");
 	document.getElementById("saveButton").addEventListener("click", saveSettings);
 });

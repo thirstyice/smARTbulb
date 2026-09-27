@@ -10,11 +10,6 @@
 				"gateway": "0.0.0.0"
 			}
 		},
-		"eth": {
-			"ip":"0.0.0.0",
-			"gateway":"0.0.0.0",
-			"subnet":"0.0.0.0"
-		},
 		"ap":{
 			"ssid":"smARTbulb",
 			"pass":"smartbulb"

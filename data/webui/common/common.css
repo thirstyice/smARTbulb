@@ -87,9 +87,16 @@ button {
 	font-weight: bold;
 }
 #settings input[type="text"], #settings select {
+	box-sizing: border-box;
 	width: 100%;
 	font-size: 15px;
 	margin-bottom: 5px;
+}
+
+.subform {
+	background-color: rgb(0, 0, 0, 30%);
+	padding: 20px;
+	margin-bottom: 10px;
 }
 
 table {
