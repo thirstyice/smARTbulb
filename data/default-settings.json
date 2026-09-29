@@ -17,12 +17,9 @@
 	},
 	"light":{
 		"module": {
-			"type": "pwm",
-			"gpio1": 21,
-			"gpio2": -1,
-			"gpio3": -1,
-			"gpio4": -1,
-			"gpio5": -1
+			"type": "none",
+			"settings": {
+			}
 		},
 		"chanmap": [0, 1, 2, 3, 4]
 	},

@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="/common/common.css"/>
 		<script src="/common/common.js"></script>
 		<script src="config.js"></script>
+		<script src="light.js"></script>
 	</head>
 	<body>
 		<div id="header">
@@ -24,35 +25,33 @@
 			<h2>Light Config</h2>
 		</div>
 		<div id="settings">
-			<label for="moduleIndex">Module</label>
-			<select id="moduleIndex">
-				%MODULES%
-			</select>
+			<div class="subform">
+				<label for="module">Module</label>
+				<select id="module" oninput="showModule(this.value)">
+					<option value="none">None</option>
+					<option value="pwm">PWM</option>
+				</select>
+				<div id="modulesettings" class="showone">
+					<form id="modulenone" class="show">
+					</form>
+					<form id="modulepwm">
+						<h3>GPIO:</h3>
+						<label>Chan 0:<input name="gpio1" type="number" min="-1" max="40" value="-1"></label>
+						<label>Chan 1:<input name="gpio2" type="number" min="-1" max="40" value="-1"></label>
+						<label>Chan 2:<input name="gpio3" type="number" min="-1" max="40" value="-1"></label>
+						<label>Chan 3:<input name="gpio4" type="number" min="-1" max="40" value="-1"></label>
+						<label>Chan 4:<input name="gpio5" type="number" min="-1" max="40" value="-1"></label>
+					</form>
+				</div>
+			</div>
 			<h2>Channel Mapping:</h2>
-			<table id="chanmap">
-				<tbody>
-					<tr>
-						<td><label for="redChan">Red:</label></td>
-						<td><input id="redChan" type="number" min="-1" max="5" value="%redChan%"></td>
-					</tr>
-					<tr>
-						<td><label for="greenChan">Green:</label></td>
-						<td><input id="greenChan" type="number" min="-1" max="5" value="%greenChan%"></td>
-					</tr>
-					<tr>
-						<td><label for="blueChan">Blue:</label></td>
-						<td><input id="blueChan" type="number" min="-1" max="5" value="%blueChan%"></td>
-					</tr>
-					<tr>
-						<td><label for="coolChan">White (cool):</label></td>
-						<td><input id="coolChan" type="number" min="-1" max="5" value="%coolChan%"></td>
-					</tr>
-					<tr>
-						<td><label for="warmChan">White (warm):</label></td>
-						<td><input id="warmChan" type="number" min="-1" max="5" value="%warmChan%"></td>
-					</tr>
-				</tbody>
-			</table>
+			<form id="chanmap">
+				<label>Red:<input name="0" type="number" min="-1" max="5" value="-1"></label>
+				<label>Green:<input name="1" type="number" min="-1" max="5" value="-1"></label>
+				<label>Blue:<input name="2" type="number" min="-1" max="5" value="-1"></label>
+				<label>Cool:<input name="3" type="number" min="-1" max="5" value="-1"></label>
+				<label>Warm:<input name="4" type="number" min="-1" max="5" value="-1"></label>
+			</form>
 		</div>
 		<div class="save">
 			<button id="saveButton" type="button">Save</button>

@@ -99,6 +99,14 @@ button {
 	margin-bottom: 10px;
 }
 
+.showone > * {
+	display: none;
+}
+.showone > .show {
+	display: initial;
+}
+
+
 table {
 	margin: auto;
 	width: 100%;
