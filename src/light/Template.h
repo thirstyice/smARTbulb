@@ -11,9 +11,7 @@
 *******************************************************************************/
 #pragma once
 
-#include "../Light.h"
-
-#ifndef NO_INCLUDE_NONE
+#include "Module.h"
 
 namespace none {
 
@@ -29,6 +27,4 @@ namespace none {
 
 } // namespace none
 
-Light None{"No Module Selected", 0, nullptr, none::begin, none::end, none::out};
-
-#endif
+Light None{"No Module Selected", none::begin, none::end, none::out};

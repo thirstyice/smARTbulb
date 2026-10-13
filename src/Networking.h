@@ -17,6 +17,8 @@
 
 namespace Networking {
 
+extern volatile bool restart;
+
 extern TaskHandle_t handle;
 
 void networkingTask(void*);

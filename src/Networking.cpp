@@ -18,6 +18,8 @@
 
 namespace Networking {
 
+volatile bool restart = true;
+
 TaskHandle_t handle;
 
 JsonVariantConst networkSettings = settingsDoc["network"];
@@ -76,7 +78,7 @@ void useAPMode() {
 	dnsServer.start(53, "*", WiFi.softAPIP());
 }
 
-void networkingTask(void*) {
+void beginNetworking() {
 	log_i("Begin Networking");
 	WiFi.onEvent(WiFiEvent);
 	WiFi.setHostname(networkSettings["hostname"].as<const char*>());
@@ -105,8 +107,14 @@ void networkingTask(void*) {
 		);
 	}
 	WebUi::begin();
+}
+
+void networkingTask(void*) {
 	while (true) {
-		if (WiFi.status() != WL_CONNECTED) {
+		if (restart) {
+			restart = false;
+			beginNetworking();
+		} else if (WiFi.status() != WL_CONNECTED) {
 			log_i("Reconnecting to wifi...");
 			WiFi.reconnect();
 		}

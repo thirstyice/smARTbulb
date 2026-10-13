@@ -11,20 +11,11 @@
 *******************************************************************************/
 #pragma once
 
-#include "../Light.h"
+#include "Module.h"
 
 #include <driver/ledc.h>
 
 namespace pwm {
-	const char * const gpioNames[] = {
-		"Output 1",
-		"Output 2",
-		"Output 3",
-		"Output 4",
-		"Output 5"
-	};
-	const uint8_t numGPIO = sizeof(gpioNames) / sizeof(gpioNames[0]);
-
 	void begin()  {
 
 	};
@@ -36,4 +27,4 @@ namespace pwm {
 	};
 } // namespace pwm
 
-Light PWM{"PWM", pwm::numGPIO, pwm::gpioNames, pwm::begin, pwm::end, pwm::out};
+Light PWM{"pwm", pwm::begin, pwm::end, pwm::out};

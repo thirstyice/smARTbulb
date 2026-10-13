@@ -11,9 +11,6 @@
 *******************************************************************************/
 #pragma once
 #include <Arduino.h>
-#include <ArxContainer.h> // For std::map
-
-#define MAX_MODULE_GPIO 5
 
 
 /**
@@ -39,19 +36,13 @@ public:
 		endFunc();
 	}
 	const char * const name;
-	const uint8_t numGPIO;
-	const char * const * gpioNames;
 	Light(
 		const char * const _name,
-		const uint8_t _numGPIO,
-		const char * const * _gpioNames,
 		std::function<void()> _beginFunc,
 		std::function<void()> _endFunc,
 		std::function<void(uint8_t, uint8_t)> _outFunc
 	) :
 		name(_name),
-		numGPIO(_numGPIO),
-		gpioNames(_gpioNames),
 		beginFunc(_beginFunc),
 		endFunc(_endFunc),
 		outFunc(_outFunc)
@@ -69,17 +60,5 @@ enum Color : uint8_t {
 	Warm,
 	End
 };
-
-
-void setColor(Color, uint8_t);
-uint8_t getColor(Color);
-bool hasRGB();
-bool hasCT();
-
-extern const int8_t numModules;
-extern Light* modules[numModules];
-extern uint8_t moduleIndex;
-extern int8_t colorChan[Color::End - 1];
-extern int8_t moduleGPIO[MAX_MODULE_GPIO];
 
 } // namespace light

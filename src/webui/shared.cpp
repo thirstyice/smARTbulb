@@ -12,7 +12,7 @@
 #include "shared.h"
 #include <AsyncJson.h>
 #include "../Networking.h"
-#include "../light/Light.h"
+#include "../Light.h"
 #include "../smartbulb-version.h"
 
 namespace WebUi {
@@ -35,15 +35,36 @@ String getGenericVar(String var) {
 	return emptyString;
 }
 
+void jsonDeepMerge(JsonVariant dst, JsonVariantConst src) {
+	if (src.is<JsonObjectConst>()) {
+		for (JsonPairConst kvp : src.as<JsonObjectConst>()) {
+			if (dst[kvp.key()]) {
+				jsonDeepMerge(dst[kvp.key()], kvp.value());
+			}
+		}
+	} else {
+		dst.set(src);
+	}
+}
+
 void begin() {
 	log_i("Begin WebUI");
 
-	server.on("/settings", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		// TODO: Set settings
+	server.on("/settings.json", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
+		jsonDeepMerge(settingsDoc, json);
+		if (json["network"]) {
+			Networking::restart = true;
+		}
+		if (json["light"]) {
+			// TODO: Restart lighting
+		}
+		if (json["control"]) {
+			// TODO: restart control
+		}
 		request->send(200);
 	});
 
-	server.on("/settings", HTTP_GET, [](AsyncWebServerRequest* request) {
+	server.on("/settings.json", HTTP_GET, [](AsyncWebServerRequest* request) {
 		AsyncResponseStream* response = request->beginResponseStream("application/json");
 		serializeJson(settingsDoc, *response);
 		request->send(response);
