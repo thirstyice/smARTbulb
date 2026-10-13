@@ -10,3 +10,9 @@
 *                                                                              *
 *******************************************************************************/
 #include "JsonSettings.h"
+
+JsonDocument settingsDoc;
+
+void convertFromJson(JsonVariantConst src, IPAddress& dst) {
+  dst.fromString(src.as<const char*>());
+}

@@ -9,10 +9,13 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
+#pragma once
 #include <ArduinoJson.h>
 
 #define SETTINGSFILE "settings.json"
 #define DEFAULTSETTINGSFILE "default-settings.json"
 #define USERDEFAULTSETTINGSFILE "user-settings.json"
 
-JsonDocument settingsDoc;
+extern JsonDocument settingsDoc;
+
+void convertFromJson(JsonVariantConst src, IPAddress& dst);
