@@ -39,11 +39,9 @@ function settingsUpdate(jsonData) {
 }
 
 function saveSettings() {
-	let settings = {};
+	let settings = { module: { settings: {} } };
 	let moduleType = document.getElementById("module").value;
-	if (moduleType != lightSettings.module.type) {
-		settings.module.type = moduleType;
-	}
+	settings.module.type = moduleType;
 	let moduleForm = new FormData(document.getElementById("module" + moduleType));
 	moduleForm.forEach((val, key) => {
 		settings.module.settings[key] = val;
