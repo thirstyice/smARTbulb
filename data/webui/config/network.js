@@ -55,8 +55,8 @@ function settingsUpdate(jsonData) {
 		);
 	}
 	document.getElementById('hostname').setAttribute("value", networkSettings.hostname);
-	document.getElementById('apSSID').setAttribute("value", networkSettings.ap.ssid);
-	document.getElementById("apPass").setAttribute("value", networkSettings.ap.pass);
+	document.getElementById('apSSID').setAttribute("value", networkSettings.apSSID);
+	document.getElementById("apPass").setAttribute("value", networkSettings.apPass);
 	document.getElementById("retries").value = networkSettings.retries;
 }
 
