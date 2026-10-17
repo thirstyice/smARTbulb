@@ -16,6 +16,7 @@ JsonDocument settingsDoc;
 void jsonMerge(JsonObject dst, JsonObjectConst src, JsonObjectConst keyref) {
 	for (JsonPairConst kvp : src) {
 		if (keyref[kvp.key()]) {
+			log_d("Setting %s", kvp.key().c_str());
 			dst[kvp.key()] = kvp.value();
 		}
 	}
@@ -23,6 +24,7 @@ void jsonMerge(JsonObject dst, JsonObjectConst src, JsonObjectConst keyref) {
 
 void mergeSettings(JsonObject dst, JsonObjectConst src) {
 	for (JsonPair kvp : settingsDoc.as<JsonObject>()) {
+		log_i("Merging %s settings", kvp.key().c_str());
 		jsonMerge(dst[kvp.key()], src[kvp.key()], settingsDoc[kvp.key()]);
 	}
 
