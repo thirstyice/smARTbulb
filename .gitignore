@@ -1,6 +1,7 @@
 # smARTbulb-specific
 
 data/user-settings.json
+unpacked_fs/
 
 # General
 .DS_Store
