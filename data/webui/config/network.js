@@ -9,7 +9,9 @@
 * For details see smARTbulb/LICENSE (if applicable)                            *
 *                                                                              *
 *******************************************************************************/
+'use strict';
 
+let networkSettings = {};
 
 function addWifi(ssid="", pass="", ip="", gateway="", subnet="", index=-1) {
 	var wifiDiv = document.getElementById("wifi");
@@ -41,7 +43,7 @@ function removeWifi(index) {
 }
 
 function settingsUpdate(jsonData) {
-	let networkSettings = jsonData.network;
+	networkSettings = jsonData.network;
 	let wifiSettings = networkSettings.wifi;
 	for (var wifi in wifiSettings) {
 		addWifi(
@@ -59,7 +61,8 @@ function settingsUpdate(jsonData) {
 }
 
 function saveSettings() {
-	let network = {};
+	let settings = {};
+	let wifi = {};
 	for (let i=0; i<wifiDiv.childElementCount; i++) {
 		let wifiFormData = new FormData(document.getElementById("wifi" + index));
 		let ssid = wifiFormData.ssid;
@@ -67,13 +70,18 @@ function saveSettings() {
 			if (key == "ssid") {
 				return;
 			}
-			network.wifi[ssid][key] = value;
+			wifi[ssid][key] = value;
 		});
 	}
-	network.hostname = document.getElementById("hostname").value;
-	network.ap.ssid = document.getElementById("apSSID").value;
-	network.ap.pass = document.getElementById("apPass").value;
-	network.retries = document.getElementById("retries").value;
-	let config = { network: network };
+	if (wifi != networkSettings.wifi) {
+		settings.wifi = wifi;
+	}
+	for (let key of ["hostname", "retries", "apSSID", "apPass"]) {
+		let val = document.getElementById(key).value;
+		if (val != networkSettings[key]) {
+			settings[key] = val;
+		}
+	}
+	let config = { network: settings };
 	sendConfig(config);
 }

@@ -71,7 +71,7 @@ void useAPMode() {
 	WiFi.disconnect();
 	WiFi.enableSTA(false);
 	WiFi.enableAP(true);
-	while (!WiFi.softAP(networkSettings["ap"]["ssid"].as<const char*>(), networkSettings["ap"]["pass"].as<const char*>())) {
+	while (!WiFi.softAP(networkSettings["apSSID"].as<const char*>(), networkSettings["apPass"].as<const char*>())) {
 		log_w("AP mode failure! Will try again");
 		vTaskDelay(1000);
 	}

@@ -35,23 +35,23 @@ String getGenericVar(String var) {
 	return emptyString;
 }
 
-void jsonDeepMerge(JsonVariant dst, JsonVariantConst src) {
-	if (src.is<JsonObjectConst>()) {
-		for (JsonPairConst kvp : src.as<JsonObjectConst>()) {
-			if (dst[kvp.key()]) {
-				jsonDeepMerge(dst[kvp.key()], kvp.value());
-			}
-		}
-	} else {
-		dst.set(src);
-	}
+
+
+void updateSettings(JsonVariantConst src) {
+	JsonDocument userSettingsDoc;
+	File userSettings = LittleFS.open(USERSETTINGSFILE);
+	deserializeJson(userSettingsDoc, userSettings);
+	userSettings.close();
+	jsonDeepMerge(userSettingsDoc, src, settingsDoc);
+	userSettings = LittleFS.open(USERSETTINGSFILE, FILE_WRITE);
+	serializeJson(userSettingsDoc, userSettings);
+	reloadSettings();
 }
 
 void begin() {
 	log_i("Begin WebUI");
-
 	server.on("/settings.json", HTTP_PUT, [](AsyncWebServerRequest* request, JsonVariant& json) {
-		jsonDeepMerge(settingsDoc, json);
+		updateSettings(json);
 		if (json["network"]) {
 			Networking::restart = true;
 		}

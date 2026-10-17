@@ -11,11 +11,14 @@
 *******************************************************************************/
 #pragma once
 #include <ArduinoJson.h>
+#include <LittleFS.h>
 
-#define SETTINGSFILE "settings.json"
 #define DEFAULTSETTINGSFILE "default-settings.json"
-#define USERDEFAULTSETTINGSFILE "user-settings.json"
+#define USERSETTINGSFILE "user-settings.json"
 
 extern JsonDocument settingsDoc;
+
+void jsonDeepMerge(JsonVariant dst, JsonVariantConst src, JsonVariantConst keyref);
+void reloadSettings();
 
 void convertFromJson(JsonVariantConst src, IPAddress& dst);

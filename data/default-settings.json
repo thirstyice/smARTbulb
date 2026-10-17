@@ -10,10 +10,8 @@
 				"gateway": "0.0.0.0"
 			}
 		},
-		"ap":{
-			"ssid":"smARTbulb",
-			"pass":"smartbulb"
-		}
+		"apSSID":"smARTbulb",
+		"apPass":"smartbulb"
 	},
 	"light":{
 		"module": {

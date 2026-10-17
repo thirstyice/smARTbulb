@@ -11,6 +11,8 @@
 *******************************************************************************/
 "use strict";
 
+let lightSettings;
+
 function showModule(module) {
 	for (const form of document.getElementById("modulesettings").getElementsByClassName("show")) {
 		form.classList.remove("show");
@@ -19,7 +21,7 @@ function showModule(module) {
 }
 
 function settingsUpdate(jsonData) {
-	let lightSettings = jsonData.light;
+	lightSettings = jsonData.light;
 	let moduleSettings = lightSettings.module;
 	document.getElementById("module").value = moduleSettings.type;
 	showModule(moduleSettings.type);
@@ -37,22 +39,23 @@ function settingsUpdate(jsonData) {
 }
 
 function saveSettings() {
-	let settings = {
-		module: {
-			type: "none",
-			settings: {}
-		},
-		chanmap: [-1, -1, -1, -1, -1],
-	};
-	settings.module.type = document.getElementById("module").value;
-	let moduleForm = new FormData(document.getElementById("module" + settings.module.type));
+	let settings = {};
+	let moduleType = document.getElementById("module").value;
+	if (moduleType != lightSettings.module.type) {
+		settings.module.type = moduleType;
+	}
+	let moduleForm = new FormData(document.getElementById("module" + moduleType));
 	moduleForm.forEach((val, key) => {
 		settings.module.settings[key] = val;
 	});
 	let chanMapForm = new FormData(document.getElementById("chanmap"));
-	settings.chanmap.forEach((val, index) => {
-		settings.chanmap[index] = chanMapForm.values[index]
+	let chanmap = lightSettings.chanmap;
+	chanmap.forEach((val, index) => {
+			chanmap[index] = chanMapForm.values[index]
 	});
+	if (chanmap != lightSettings.chanmap) {
+		settings.chanmap = chanmap;
+	}
 
 	let config = { light: settings };
 	sendConfig(config);

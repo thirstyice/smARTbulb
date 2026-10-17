@@ -1,11 +1,12 @@
 #include <Arduino.h>
 #include "Networking.h"
-#include <LittleFS.h>
+#include "JsonSettings.h"
 
 void setup() {
 	Serial.begin(115200);
 	log_d("Begin smARTbulb");
 	LittleFS.begin();
+	reloadSettings();
 	// Set up Light
 	xTaskCreate(
 		Networking::networkingTask,

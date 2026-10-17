@@ -11,22 +11,22 @@
 *******************************************************************************/
 "use strict";
 
+let controlSettings = {};
+
 function settingsUpdate(jsonData) {
-	let controlSettings = jsonData.control;
+	controlSettings = jsonData.control;
 	for (var key in controlSettings) {
 		document.getElementById(key).value = controlSettings[key];
 	}
 }
 
 function saveSettings() {
-	let settings = {
-		protocol: "none",
-		universe: 1,
-		address: 1,
-		timeout: 5000
-	};
-	for (var key in settings) {
-		settings[key] = document.getElementById(key).value;
+	let settings = {};
+	for (var key of ["protocol", "universe", "address", "timeout"]) {
+		let value = document.getElementById(key).value;
+		if (value != controlSettings[key]) {
+			settings[key] = value;
+		}
 	}
 	let config = { control: settings };
 	sendConfig(config);
