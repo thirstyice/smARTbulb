@@ -13,8 +13,8 @@
 #include <ArduinoJson.h>
 #include <LittleFS.h>
 
-#define DEFAULTSETTINGSFILE "default-settings.json"
-#define USERSETTINGSFILE "user-settings.json"
+#define DEFAULTSETTINGSFILE "/default-settings.json"
+#define USERSETTINGSFILE "/user-settings.json"
 
 extern JsonDocument settingsDoc;
 

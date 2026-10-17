@@ -22,7 +22,7 @@ volatile bool restart = true;
 
 TaskHandle_t handle;
 
-JsonVariantConst networkSettings = settingsDoc["network"];
+JsonVariantConst networkSettings;
 
 WiFiMulti wifiMulti;
 
@@ -80,6 +80,7 @@ void useAPMode() {
 
 void beginNetworking() {
 	log_i("Begin Networking");
+	networkSettings = settingsDoc["network"];
 	WiFi.onEvent(WiFiEvent);
 	WiFi.setHostname(networkSettings["hostname"].as<const char*>());
 	WiFi.enableSTA(true);
