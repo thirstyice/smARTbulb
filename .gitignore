@@ -1,6 +1,6 @@
 # smARTbulb-specific
 
-
+data/user-settings.json
 
 # General
 .DS_Store
