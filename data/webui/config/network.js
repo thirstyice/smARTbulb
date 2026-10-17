@@ -63,7 +63,7 @@ function settingsUpdate(jsonData) {
 function saveSettings() {
 	let settings = {};
 	let wifi = {};
-	for (let i=0; i<wifiDiv.childElementCount; i++) {
+	for (let i=0; i<document.getElementById("wifi").childElementCount; i++) {
 		let wifiFormData = new FormData(document.getElementById("wifi" + index));
 		let ssid = wifiFormData.ssid;
 		wifiFormData.forEach((value, key) => {
