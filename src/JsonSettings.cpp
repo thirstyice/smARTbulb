@@ -13,20 +13,19 @@
 
 JsonDocument settingsDoc;
 
-void jsonDeepMerge(JsonVariant dst, JsonVariantConst src, JsonVariantConst keyref) {
-	if (src.is<JsonObjectConst>()) {
-		for (JsonPairConst kvp : src.as<JsonObjectConst>()) {
-			if (keyref[kvp.key()]) {
-				if (dst[kvp.key()]) {
-					jsonDeepMerge(dst[kvp.key()], kvp.value(), keyref[kvp.key()]);
-				} else {
-					dst[kvp.key()] = kvp.value();
-				}
-			}
+void jsonMerge(JsonObject dst, JsonObjectConst src, JsonObjectConst keyref) {
+	for (JsonPairConst kvp : src) {
+		if (keyref[kvp.key()]) {
+			dst[kvp.key()] = kvp.value();
 		}
-	} else {
-		dst.set(src);
 	}
+}
+
+void mergeSettings(JsonObject dst, JsonObjectConst src) {
+	for (JsonPair kvp : settingsDoc.as<JsonObject>()) {
+		jsonMerge(dst[kvp.key()], src[kvp.key()], settingsDoc[kvp.key()]);
+	}
+
 }
 
 void reloadSettings() {
@@ -37,7 +36,7 @@ void reloadSettings() {
 	JsonDocument userSettingsDoc;
 	deserializeJson(userSettingsDoc, userSettings);
 	userSettings.close();
-	jsonDeepMerge(settingsDoc, userSettingsDoc, settingsDoc);
+	mergeSettings(settingsDoc.as<JsonObject>(), userSettingsDoc.as<JsonObjectConst>());
 }
 
 void convertFromJson(JsonVariantConst src, IPAddress& dst) {

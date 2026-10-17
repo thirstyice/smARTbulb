@@ -18,7 +18,7 @@
 
 extern JsonDocument settingsDoc;
 
-void jsonDeepMerge(JsonVariant dst, JsonVariantConst src, JsonVariantConst keyref);
+void mergeSettings(JsonObject dst, JsonObjectConst src);
 void reloadSettings();
 
 void convertFromJson(JsonVariantConst src, IPAddress& dst);

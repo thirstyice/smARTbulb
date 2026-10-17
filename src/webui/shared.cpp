@@ -42,7 +42,7 @@ void updateSettings(JsonVariantConst src) {
 	File userSettings = LittleFS.open(USERSETTINGSFILE);
 	deserializeJson(userSettingsDoc, userSettings);
 	userSettings.close();
-	jsonDeepMerge(userSettingsDoc, src, settingsDoc);
+	mergeSettings(userSettingsDoc.as<JsonObject>(), src);
 	userSettings = LittleFS.open(USERSETTINGSFILE, FILE_WRITE);
 	serializeJson(userSettingsDoc, userSettings);
 	reloadSettings();
