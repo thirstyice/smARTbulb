@@ -65,7 +65,8 @@ function saveSettings() {
 	let wifi = {};
 	for (let i=0; i<document.getElementById("wifi").childElementCount; i++) {
 		let wifiFormData = new FormData(document.getElementById("wifi" + i));
-		let ssid = wifiFormData.ssid;
+		let ssid = wifiFormData.get("ssid");
+		wifi[ssid] = {};
 		wifiFormData.forEach((value, key) => {
 			if (key == "ssid") {
 				return;
