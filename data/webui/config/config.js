@@ -32,7 +32,10 @@ function sendConfig(config) {
 		headers: {
       "Content-Type": "application/json",
     },
-	});
+	}).then(
+		window.open("/config/index.html", "_self")
+	);
+
 }
 
 addEventListener("DOMContentLoaded", () => {
